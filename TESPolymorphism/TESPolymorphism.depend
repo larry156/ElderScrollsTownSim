@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1549215237 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+	<iostream>
+
+1549219647 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+	"Citizen.h"
+	<iostream>
+	<cstdlib>
+
+1549219551 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+	<vector>
+	<string>
+
