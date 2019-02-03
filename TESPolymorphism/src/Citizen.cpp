@@ -47,6 +47,16 @@ bool Citizen::getDead()
 	return isDead;
 }
 
+// Get or set curTarget
+//Citizen* Citizen::getTarget()
+//{
+//	return curTarget;
+//}
+//void Citizen::setTarget(Citizen* target)
+//{
+//	curTarget = target;
+//}
+
 // Paying money to various entities, as well as getting paid.
 void Citizen::payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney = false, bool isTheft = false)
 {
@@ -105,4 +115,16 @@ void Citizen::kill()
 {
 	isDead = true;
 	cout << getName() << " has met their demise." << endl;
+}
+
+// Find something in a string and replace it. Used heavily for dialogue.
+bool Citizen::replaceString(string &theString, string replaceThis, string replaceWith)
+{
+	size_t start_pos = theString.find(replaceThis);
+    if(start_pos == std::string::npos)
+	{
+		return false;
+	}
+    theString.replace(start_pos, replaceThis.length(), replaceWith);
+    return true;
 }

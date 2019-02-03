@@ -4,11 +4,13 @@
 #include <Citizen.h>
 
 
-class BeastRace : public Citizen
+class BeastRace : protected Citizen
 {
 	public:
-		BeastRace();
+		BeastRace(std::string myName, std::string mySpecies, int startMoneyMin, int startMoneyMax, int speciesTaxAmount);
 		virtual ~BeastRace();
+		virtual void speak() = 0;
+		virtual void upkeep(Citizen* target) = 0;
 
 	protected:
 
