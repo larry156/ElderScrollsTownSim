@@ -21,7 +21,7 @@ class Citizen
 		virtual void speak() = 0;
 		virtual void upkeep(Citizen* target) = 0;
 		virtual void kill();
-		bool replaceString(std::string &theString, std::string replaceThis, std::string replaceWith); // Used to replace things like %target% with actual words/names.
+		void replaceString(std::string &theString, std::string replaceThis, std::string replaceWith); // Used to replace things like %target% with actual words/names.
 
 	protected:
 		bool isDead;

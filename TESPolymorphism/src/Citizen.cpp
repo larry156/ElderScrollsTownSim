@@ -50,6 +50,8 @@ int Citizen::getCombatSkill()
 {
 	return combatSkill;
 }
+
+// As the name implies, used for combat. Returns a random number between 0 and 100 + this Citizen's combatSkill.
 int Citizen::combatRoll()
 {
 	int roll = rand() % 101 + combatSkill;
@@ -117,13 +119,16 @@ void Citizen::kill()
 }
 
 // Find something in a string and replace it. Used heavily for dialogue.
-bool Citizen::replaceString(string &theString, string replaceThis, string replaceWith)
+void Citizen::replaceString(string &theString, string replaceThis, string replaceWith)
 {
-	size_t start_pos = theString.find(replaceThis);
-    if(start_pos == std::string::npos)
+	if (replaceThis == "")
 	{
-		return false;
+		return;
 	}
-    theString.replace(start_pos, replaceThis.length(), replaceWith);
-    return true;
+	size_t pos = 0;
+    while ((pos = theString.find(replaceThis)) != string::npos)
+	{
+		theString.replace(pos, replaceThis.length(), replaceWith);
+		pos += replaceWith.length();
+	}
 }

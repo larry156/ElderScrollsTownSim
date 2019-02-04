@@ -24,6 +24,7 @@ int main()
 	cout << endl;
 
 	Jorunn->upkeep(Mera);
+	cout << endl;
 	Mera->upkeep(Jorunn);
 
 	cout << endl;

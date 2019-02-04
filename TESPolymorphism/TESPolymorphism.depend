@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1549233972 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+1549320925 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
 	<iostream>
 	<cstdlib>
 	<vector>
@@ -10,12 +10,12 @@
 	"BeastRace.h"
 	"Nord.h"
 
-1549236604 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1549319977 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<cstdlib>
 
-1549236604 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1549319905 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
@@ -35,7 +35,7 @@
 1549233921 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
 	<Citizen.h>
 
-1549232823 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
+1549316259 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
 	"Human.h"
 	<iostream>
 	<cstdlib>
@@ -44,13 +44,14 @@
 	<Citizen.h>
 	<string>
 
-1549236604 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
+1549321015 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
 	<algorithm>
+	<vector>
 
-1549235992 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
+1549316259 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
