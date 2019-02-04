@@ -54,3 +54,59 @@
 	<Human.h>
 	<string>
 
+1549288128 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\main.cpp
+	<iostream>
+	<cstdlib>
+	<vector>
+	<time.h>
+	"Citizen.h"
+	"Human.h"
+	"Mer.h"
+	"BeastRace.h"
+	"Nord.h"
+
+1549291847 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\citizen.h
+	<vector>
+	<string>
+
+1549288130 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\human.h
+	<Citizen.h>
+	<string>
+
+1549288130 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\mer.h
+	<Citizen.h>
+
+1549288129 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\beastrace.h
+	<Citizen.h>
+
+1549291209 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\nord.h
+	<Human.h>
+	<string>
+
+1549288134 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\beastrace.cpp
+	"BeastRace.h"
+	<iostream>
+	<cstdlib>
+
+1549291847 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\citizen.cpp
+	"Citizen.h"
+	<iostream>
+	<cstdlib>
+
+1549289994 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\human.cpp
+	"Human.h"
+	<iostream>
+	<cstdlib>
+
+1549288136 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\mer.cpp
+	"Mer.h"
+	<iostream>
+	<cstdlib>
+
+1549291953 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\nord.cpp
+	"Nord.h"
+	<iostream>
+	<cstdlib>
+	<algorithm>
+	<vector>
+

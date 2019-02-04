@@ -15,6 +15,9 @@ class Nord : public Human
 	protected:
 
 	private:
+		void hunt();
+		void brawl();
+		int brawlChance;
 };
 
 #endif // NORD_H

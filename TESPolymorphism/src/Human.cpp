@@ -10,6 +10,7 @@ using namespace std;
 
 Human::Human(string myName, string mySpecies, int startMoneyMin, int startMoneyMax, int speciesTaxAmount) : Citizen(myName, mySpecies, startMoneyMin, startMoneyMax, speciesTaxAmount)
 {
+	// The 8 Divines are pretty standard among most humans
 	deities.push_back("Akatosh");
 	deities.push_back("Arkay");
 	deities.push_back("Dibella");
@@ -18,6 +19,10 @@ Human::Human(string myName, string mySpecies, int startMoneyMin, int startMoneyM
 	deities.push_back("Mara");
 	deities.push_back("Stendarr");
 	deities.push_back("Zenithar");
+
+	// Add some generic dialogue
+	dialogue.push_back("The Empire isn't what it used to be, that's for sure.");
+	dialogue.push_back("Hey, %target%, you aren't a daedric cultist, are you?");
 
 	cout << "A human named " << myName << " has moved into town." << endl;
 }

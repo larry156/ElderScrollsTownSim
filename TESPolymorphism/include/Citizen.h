@@ -13,11 +13,11 @@ class Citizen
 		std::string getSpecies();
 		int checkWealth();
 		bool getDead();
-		//Citizen* getTarget();
-		//void setTarget(Citizen* target);
-		void payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney, bool isTheft);
+		int getCombatSkill();
+		int combatRoll();
+		void payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney = false, bool isTheft = false);
 		void payTaxes();
-		void getPaid(int toPay, bool showMessage);
+		void getPaid(int toPay, bool showMessage = true);
 		virtual void speak() = 0;
 		virtual void upkeep(Citizen* target) = 0;
 		virtual void kill();
@@ -28,6 +28,8 @@ class Citizen
 		std::vector<std::string> dialogue;
 		std::vector<std::string> deities;
 		Citizen* curTarget;
+		int speakChance;
+		int combatSkill;
 
 	private:
 		std::string name;

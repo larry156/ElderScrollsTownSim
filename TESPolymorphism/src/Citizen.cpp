@@ -46,19 +46,18 @@ bool Citizen::getDead()
 {
 	return isDead;
 }
-
-// Get or set curTarget
-//Citizen* Citizen::getTarget()
-//{
-//	return curTarget;
-//}
-//void Citizen::setTarget(Citizen* target)
-//{
-//	curTarget = target;
-//}
+int Citizen::getCombatSkill()
+{
+	return combatSkill;
+}
+int Citizen::combatRoll()
+{
+	int roll = rand() % 101 + combatSkill;
+	return roll;
+}
 
 // Paying money to various entities, as well as getting paid.
-void Citizen::payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney = false, bool isTheft = false)
+void Citizen::payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney, bool isTheft)
 {
 	// Theft and non-theft have different messages, if requireSuffiecientMoney is false, this person will just give the recipient
 	// all of their money if they don't have enough to pay the recipient's requested amount.
@@ -101,7 +100,7 @@ void Citizen::payTaxes()
 		kill();
 	}
 }
-void Citizen::getPaid(int toPay, bool showMessage = true)
+void Citizen::getPaid(int toPay, bool showMessage)
 {
 	money += toPay;
 	if (showMessage) // Sometimes we don't want to show this message.
