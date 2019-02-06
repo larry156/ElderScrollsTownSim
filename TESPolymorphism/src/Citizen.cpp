@@ -4,6 +4,7 @@
 
 #include "Citizen.h"
 #include <iostream>
+#include <string>
 #include <cstdlib>
 
 using namespace std;
@@ -33,6 +34,12 @@ Citizen::~Citizen()
 string Citizen::getName()
 {
 	return name;
+}
+string Citizen::shortName() // Return their first name.
+{
+	// Find the index of the first space character
+	size_t firstSpacePos = name.find(" ");
+	return name.substr(0, firstSpacePos);
 }
 string Citizen::getSpecies()
 {

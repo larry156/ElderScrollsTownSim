@@ -1,110 +1,118 @@
 # depslib dependency file v1.0
-1549320925 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+1549421021 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
 	<iostream>
+	<fstream>
 	<cstdlib>
 	<vector>
+	<map>
 	<time.h>
+	<windows.h>
 	"Citizen.h"
 	"Human.h"
 	"Mer.h"
 	"BeastRace.h"
 	"Nord.h"
 
-1549319977 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
+	<string>
 	<cstdlib>
 
-1549319905 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
-1549232880 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\beastrace.cpp
+1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\beastrace.cpp
 	"BeastRace.h"
 	<iostream>
 	<cstdlib>
 
-1549233921 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\beastrace.h
+1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\beastrace.h
 	<Citizen.h>
 
-1549232834 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\mer.cpp
+1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\mer.cpp
 	"Mer.h"
 	<iostream>
 	<cstdlib>
 
-1549233921 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
+1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
 	<Citizen.h>
 
-1549316259 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
+1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
 	"Human.h"
 	<iostream>
 	<cstdlib>
 
-1549235986 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\human.h
+1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\human.h
 	<Citizen.h>
 	<string>
 
-1549321015 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
+1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
 	<algorithm>
 	<vector>
 
-1549316259 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
+1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
-1549288128 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\main.cpp
+1549377382 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\main.cpp
 	<iostream>
+	<fstream>
 	<cstdlib>
 	<vector>
+	<map>
 	<time.h>
+	<windows.h>
 	"Citizen.h"
 	"Human.h"
 	"Mer.h"
 	"BeastRace.h"
 	"Nord.h"
 
-1549291847 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\citizen.h
+1549376790 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
-1549288130 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\human.h
+1549374798 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\human.h
 	<Citizen.h>
 	<string>
 
-1549288130 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\mer.h
+1549374801 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\mer.h
 	<Citizen.h>
 
-1549288129 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\beastrace.h
+1549374790 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\beastrace.h
 	<Citizen.h>
 
-1549291209 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\nord.h
+1549374806 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
-1549288134 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\beastrace.cpp
+1549374819 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\beastrace.cpp
 	"BeastRace.h"
 	<iostream>
 	<cstdlib>
 
-1549291847 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\citizen.cpp
+1549376842 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
+	<string>
 	<cstdlib>
 
-1549289994 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\human.cpp
+1549376759 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\human.cpp
 	"Human.h"
 	<iostream>
 	<cstdlib>
 
-1549288136 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\mer.cpp
+1549374826 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\mer.cpp
 	"Mer.h"
 	<iostream>
 	<cstdlib>
 
-1549291953 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\nord.cpp
+1549377811 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>

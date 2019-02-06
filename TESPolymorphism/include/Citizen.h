@@ -10,6 +10,7 @@ class Citizen
 		Citizen(std::string myName, std::string mySpecies, int startMoneyMin, int startMoneyMax, int speciesTaxAmount);
 		virtual ~Citizen();
 		std::string getName();
+		std::string shortName();
 		std::string getSpecies();
 		int checkWealth();
 		bool getDead();

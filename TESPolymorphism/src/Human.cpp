@@ -22,7 +22,7 @@ Human::Human(string myName, string mySpecies, int startMoneyMin, int startMoneyM
 
 	// Add some generic dialogue
 	dialogue.push_back("The Empire isn't what it used to be, that's for sure.");
-	dialogue.push_back("Hey, %target%, you aren't a daedric cultist, are you?");
+	dialogue.push_back("Hey, %targetfirst%, you aren't a daedric cultist, are you?");
 
 	cout << "A human named " << myName << " has moved into town." << endl;
 }
