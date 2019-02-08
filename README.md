@@ -10,10 +10,9 @@ Whoever has the higher roll wins that fight.
 - Nords
 
 # PARTIALLY IMPLEMENTED
-- 
+- Town Features
 
 # TODO
-- Town Features
 - Imperials
 - Redguards
 - Bretons
@@ -22,4 +21,4 @@ Whoever has the higher roll wins that fight.
 - Altmer
 - Bosmer
 - Khajiit
-- Argoninas
+- Argonians
