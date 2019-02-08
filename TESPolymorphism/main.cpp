@@ -75,7 +75,7 @@ int main()
 	}
 
 	// Should be at least 4, must be > 1.
-	int townSize = 200;
+	int townSize = 6;
 	// Make sure the number of citizens is reasonable.
 	if (townSize < 1)
 	{
@@ -88,16 +88,11 @@ int main()
 		SetConsoleTextAttribute(consHandle, C_WARNING);
 		cout << "Warning: Town size should be at least 4." << endl;
 	}
-	else if (townSize > 10)
+	// The largest town size tested was 200 people, and while it DOES work, at first glance, there's no reason for the town size to be so high.
+	else if (townSize > 50)
 	{
 		SetConsoleTextAttribute(consHandle, C_WARNING);
-		cout << "Warning: It may be hard to keep track of the town with sizes over 10." << endl;
-	}
-	// The largest town size tested was 200 people, and while it DOES work, at first glance, there's no reason for the town size to be so high.
-	if (townSize > 50)
-	{
-		SetConsoleTextAttribute(consHandle, C_ERROR);
-		cout << "Error: Very large town sizes are not supported. Enter \"IGNORE\" to ignore this error." << endl;
+		cout << "Warning: Very large town sizes are not supported. Enter \"IGNORE\" to ignore this and continue (Not recommended)." << endl;
 		SetConsoleTextAttribute(consHandle, C_WHITE);
 
 		string ignoreThis;
@@ -110,9 +105,15 @@ int main()
 		}
 		else
 		{
-			cout << "Ignoring error and continuing..." << endl;
+			cout << "Ignoring and continuing..." << endl;
 		}
 	}
+	else if (townSize > 10)
+	{
+		SetConsoleTextAttribute(consHandle, C_WARNING);
+		cout << "Warning: It may be hard to keep track of the town with sizes over 10." << endl;
+	}
+
 	SetConsoleTextAttribute(consHandle, C_WHITE);
 
 	Citizen* theTown[townSize];
@@ -137,12 +138,12 @@ int main()
     while (keepGoing != "no" && keepGoing != "No")
     {
     	// Increment day/month/year (not in that order)
-    	if (curDay >= 30)
+    	if (curDay >= DAYS_IN_A_MONTH)
 		{
 			curDay = 0;
 			curMonth++;
 		}
-		if (curMonth >= 12)
+		if (curMonth >= 12) // There will always be 12 months in a year, which is why this isn't a variable.
 		{
 			curMonth = 0;
 			curYear++;
