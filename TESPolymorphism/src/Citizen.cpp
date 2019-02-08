@@ -118,6 +118,27 @@ void Citizen::getPaid(int toPay, bool showMessage)
 	}
 }
 
+// Speech. Randomly choose a line of dialogue and say it, replacing %these% when necessary.
+void Citizen::speak()
+{
+	if (!isDead)
+	{
+		// Roll for dialogue
+		int dialogueRoll = rand() % dialogue.size();
+		int deityRoll = rand() % deities.size();
+		string chosenDialogue = dialogue[dialogueRoll];
+
+		// Replace %these%
+		replaceString(chosenDialogue, "%target%", curTarget->getName());
+		replaceString(chosenDialogue, "%targetfirst%", curTarget->shortName());
+		replaceString(chosenDialogue, "%deity%", deities[deityRoll]);
+
+		// Say the line
+		cout << getName() << ": " << chosenDialogue << endl;
+	}
+}
+
+
 // This function kills the citizen and displays a message. Different races may do different things when they die.
 void Citizen::kill()
 {

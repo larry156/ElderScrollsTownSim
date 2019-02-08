@@ -9,7 +9,7 @@ class Nord : public Human
 	public:
 		Nord(std::string myName);
 		virtual ~Nord();
-		void speak();
+		//void speak();
 		void upkeep(Citizen* target);
 
 	protected:

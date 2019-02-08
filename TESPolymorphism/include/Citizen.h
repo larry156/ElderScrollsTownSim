@@ -19,7 +19,7 @@ class Citizen
 		void payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney = false, bool isTheft = false);
 		void payTaxes();
 		void getPaid(int toPay, bool showMessage = true);
-		virtual void speak() = 0;
+		virtual void speak();
 		virtual void upkeep(Citizen* target) = 0;
 		virtual void kill();
 		void replaceString(std::string &theString, std::string replaceThis, std::string replaceWith); // Used to replace things like %target% with actual words/names.

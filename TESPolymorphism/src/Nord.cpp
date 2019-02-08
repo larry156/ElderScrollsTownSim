@@ -38,26 +38,6 @@ Nord::~Nord()
 	cout << getName() << " was entombed in the Hall of the Dead." << endl;
 }
 
-// Speech. Randomly choose a line of dialogue and say it, replacing %these% when necessary.
-void Nord::speak()
-{
-	if (!isDead)
-	{
-		// Roll for dialogue
-		int dialogueRoll = rand() % dialogue.size();
-		int deityRoll = rand() % deities.size();
-		string chosenDialogue = dialogue[dialogueRoll];
-
-		// Replace %these%
-		replaceString(chosenDialogue, "%target%", curTarget->getName());
-		replaceString(chosenDialogue, "%targetfirst%", curTarget->shortName());
-		replaceString(chosenDialogue, "%deity%", deities[deityRoll]);
-
-		// Say the line
-		cout << getName() << ": " << chosenDialogue << endl;
-	}
-}
-
 // Each upkeep, Nords will speak, pay taxes, and perform an action.
 void Nord::upkeep(Citizen* target)
 {

@@ -55,7 +55,6 @@ int main()
     // Names were generated using fantasynamegenerators.com
     ifstream namesNord("nordNames.txt");
     map<string, vector<string>> nameLists;
-    //nameLists["Nord"] = new vector<string;
     string curName = "this is wrong";
     cout << "Compiling list of names..." << endl;
     // Read in Nord names
