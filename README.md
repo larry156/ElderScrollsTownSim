@@ -11,9 +11,9 @@ Whoever has the higher roll wins that fight.
 
 # PARTIALLY IMPLEMENTED
 - Town Features
+- Imperials
 
 # TODO
-- Imperials
 - Redguards
 - Bretons
 - Orsimer
