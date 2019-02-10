@@ -15,6 +15,7 @@
 #include "Mer.h"
 #include "BeastRace.h"
 #include "Nord.h"
+#include "Imperial.h"
 
 using namespace std;
 
@@ -27,18 +28,40 @@ string nameGen(vector<string> &nameList)
 
 // This function will allow new citizens to move into the town.
 // It requires the town array, a map storing name vectors, and the citizen's index in the array.
-void moveIn(Citizen* townArray[], map<string, vector<string>> &nameLists, int indexPos)
+void moveIn(Citizen* townArray[], map<string, vector<string>> &nameListsFirst, map<string, vector<string>> &nameListsLast, int indexPos)
 {
-    int raceRoll = rand() % 2;
+    int raceRoll = rand() % nameListsFirst.size();
     if (raceRoll == 0)
     {
-        townArray[indexPos] = new Nord(nameGen(nameLists["Nord"]));
+        townArray[indexPos] = new Nord(nameGen(nameListsFirst["Nord"]) + " " + nameGen(nameListsLast["Nord"]));
     }
     else
     {
-        townArray[indexPos] = new Nord(nameGen(nameLists["Nord"]));
+        townArray[indexPos] = new Imperial(nameGen(nameListsFirst["Imperial"]) + " " + nameGen(nameListsLast["Imperial"]));
     }
     cout << endl;
+}
+
+// This function will store the contents of a file into a vector of strings. It returns true if there was an error.
+bool readNames(string fileName, vector<string> &theList)
+{
+	ifstream readFrom(fileName);
+	string curName = "this is wrong";
+	while (curName != "") // Please ensure there is an empty line at the end of the text file.
+	{
+		getline(readFrom, curName);
+		if (curName != "")
+		{
+			theList.push_back(curName);
+		}
+		// If curName is still "this is wrong", then the name file must not exist.
+		if (curName == "this is wrong")
+		{
+			cout << "Error: " << fileName << " was not found. Exiting..." << endl;
+			return true;
+		}
+	}
+	return false;
 }
 
 int main()
@@ -51,29 +74,32 @@ int main()
     const int C_GRAY = 8, C_TURQUOISE = 3, C_YELLOW = 14, C_WHITE = 15, C_ERROR = 244, C_WARNING = 12;
     SetConsoleTextAttribute(consHandle, C_WHITE); // For some reason the default console colour is actually a light shade of gray.
 
-    // Read in names from a text file and store them in a vector
+    // Read in names from text files and store them in 2 vectors; one for first names, one for last names.
     // Names were generated using fantasynamegenerators.com
-    ifstream namesNord("nordNames.txt");
-    map<string, vector<string>> nameLists;
-    string curName = "this is wrong";
+    //ifstream namesNordFirst("Names/nordNamesFirst.txt"), namesNordLast("Names/nordNamesFirst.txt");
+    map<string, vector<string>> nameListsFirst, nameListsLast;
     cout << "Compiling list of names..." << endl;
     // Read in Nord names
-    while (curName != "") // Please ensure there is an empty line at the end of the text file.
+    if (readNames("Names/nordNamesFirst.txt", nameListsFirst["Nord"]))
 	{
-		getline(namesNord, curName);
-		if (curName != "")
-		{
-			nameLists["Nord"].push_back(curName);
-		}
-		// If curName is still "this is wrong", then the name file must not exist.
-		if (curName == "this is wrong")
-		{
-			cout << "Error: nordNames.txt was not found. Exiting..." << endl;
-			return 1;
-		}
+		return 1;
+	}
+	if (readNames("Names/nordNamesLast.txt", nameListsLast["Nord"]))
+	{
+		return 1;
+	}
+	if (readNames("Names/imperialNamesFirst.txt", nameListsFirst["Imperial"]))
+	{
+		return 1;
+	}
+	if (readNames("Names/imperialNamesLast.txt", nameListsLast["Imperial"]))
+	{
+		return 1;
 	}
 
-	// Should be at least 4, must be > 1.
+	//cout << "There are " << nameListsFirst.size() << " races." << endl;
+
+	// Should be at least 4, must be greater than 1.
 	int townSize = 6;
 	// Make sure the number of citizens is reasonable.
 	if (townSize < 1)
@@ -125,7 +151,7 @@ int main()
 	SetConsoleTextAttribute(consHandle, C_GRAY);
 	for (int i = 0; i < townSize; i++)
 	{
-		moveIn(theTown, nameLists, i);
+		moveIn(theTown, nameListsFirst, nameListsLast, i);
 	}
 
 	// For keeping track of days elapsed & whether or not to keep simulating.
@@ -175,7 +201,7 @@ int main()
 			if (theTown[i]->getDead())
 			{
 				delete theTown[i];
-				moveIn(theTown, nameLists, i);
+				moveIn(theTown, nameListsFirst, nameListsLast, i);
 			}
 		}
 

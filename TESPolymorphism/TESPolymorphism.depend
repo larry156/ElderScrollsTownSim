@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1549421021 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+1549835152 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
 	<iostream>
 	<fstream>
 	<cstdlib>
@@ -12,14 +12,15 @@
 	"Mer.h"
 	"BeastRace.h"
 	"Nord.h"
+	"Imperial.h"
 
-1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1549665406 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<string>
 	<cstdlib>
 
-1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1549834032 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
@@ -28,7 +29,7 @@
 	<iostream>
 	<cstdlib>
 
-1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\beastrace.h
+1549665406 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\beastrace.h
 	<Citizen.h>
 
 1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\mer.cpp
@@ -36,7 +37,7 @@
 	<iostream>
 	<cstdlib>
 
-1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
+1549665406 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
 	<Citizen.h>
 
 1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
@@ -44,18 +45,18 @@
 	<iostream>
 	<cstdlib>
 
-1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\human.h
+1549665406 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\human.h
 	<Citizen.h>
 	<string>
 
-1549369654 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
+1549834135 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
 	<algorithm>
 	<vector>
 
-1549369654 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
+1549665406 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
@@ -118,4 +119,12 @@
 	<cstdlib>
 	<algorithm>
 	<vector>
+
+1549835535 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
+	"Imperial.h"
+	<iostream>
+
+1549831046 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\imperial.h
+	<Human.h>
+	<string>
 

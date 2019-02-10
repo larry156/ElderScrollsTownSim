@@ -31,6 +31,7 @@ class Citizen
 		Citizen* curTarget;
 		int speakChance;
 		int combatSkill;
+		int jobSkill;
 
 	private:
 		std::string name;

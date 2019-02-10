@@ -37,12 +37,14 @@
 		<Unit filename="include/BeastRace.h" />
 		<Unit filename="include/Citizen.h" />
 		<Unit filename="include/Human.h" />
+		<Unit filename="include/Imperial.h" />
 		<Unit filename="include/Mer.h" />
 		<Unit filename="include/Nord.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/BeastRace.cpp" />
 		<Unit filename="src/Citizen.cpp" />
 		<Unit filename="src/Human.cpp" />
+		<Unit filename="src/Imperial.cpp" />
 		<Unit filename="src/Mer.cpp" />
 		<Unit filename="src/Nord.cpp" />
 		<Extensions>

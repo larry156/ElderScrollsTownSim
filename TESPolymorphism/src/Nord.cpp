@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 2)
+Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 3)
 {
 	// Remove deities from the pantheon. These are probably going to be replaced with something else.
 	deities.erase(find(deities.begin(), deities.end(), "Kynareth"));
@@ -30,12 +30,20 @@ Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 2)
 	speakChance = rand() % 21 + 50; // Nords have a 50-70% chance of speaking.
 	brawlChance = rand() % 101; // Nords have a 0-100% chance of brawling someone.
 	combatSkill = rand() % 21 + 10; // Nords have a combatSkill between 10-30.
+	// Nords don't have a jobSkill (yet) because they were created before that was added. Hunting might be reworked to use it at some point though.
 
 	cout << getName() << " is a Nord of Skyrim." << endl;
 }
 Nord::~Nord()
 {
-	cout << getName() << " was entombed in the Hall of the Dead." << endl;
+	if (!getDead())
+	{
+		cout << getName() << " is still living in the town." << endl;
+	}
+	else
+	{
+		cout << getName() << " was entombed in the Hall of the Dead." << endl;
+	}
 }
 
 // Each upkeep, Nords will speak, pay taxes, and perform an action.
@@ -109,7 +117,8 @@ void Nord::brawl()
 
 		// Challenge the target
 		cout << getName() << ": " << curTarget->getName() << ", you milk-drinker! I challenge you to a brawl!" << endl;
-		int acceptRoll = curTarget->combatRoll() - curTarget->getCombatSkill() / 2; // They are more likely to accept with a higher combatSkill.
+		// They are more likely to accept with a higher combatSkill. Since combatRoll adds their combatSkill to the roll, it has to be subtracted once here.
+		int acceptRoll = curTarget->combatRoll() - curTarget->getCombatSkill() - curTarget->getCombatSkill() / 2;
 		if (acceptRoll < ACCEPT_THRESHOLD) // They accept
 		{
 			cout << curTarget->getName() << ": Alright, I accept. Do your worst!" << endl;
