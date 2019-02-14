@@ -11,9 +11,9 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 {
 	// The 8 Divines have already been set up in the Human constructor
 	// Determine profession
-	profession = 0;//rand() % 3; // 0 for Bard, 1 for Assassin, 2 for Merchant.
+	profession = rand() % 2; // 0 for Bard, 1 for Assassin, 2 for Merchant (Not yet implemented).
 
-	// Add some dialogue for Imperials. First add profession-related dialogue, then shared dialogue.
+	// Add some dialogue for Imperials. First add profession-related dialogue, then shared dialogue. Assassins also get two deities.
 	if (profession == PROF_BARD)
 	{
 		dialogue.push_back("Care for a song, %targetfirst%?");
@@ -21,6 +21,9 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	}
 	else if (profession == PROF_ASSASSIN)
 	{
+		deities.push_back("Sithis");
+		deities.push_back("The Night Mother");
+
 		dialogue.push_back("*Remains silent*");
 		dialogue.push_back("I wonder if I have a new contract today...");
 
@@ -57,6 +60,12 @@ Imperial::~Imperial()
 	}
 }
 
+// Return an int representing this Imperial's profession.
+int Imperial::getProfession()
+{
+	return profession;
+}
+
 // Each upkeep, Imperials may speak, will pay taxes, and may perform an action based on their profession.
 void Imperial::upkeep(Citizen* target)
 {
@@ -68,6 +77,15 @@ void Imperial::upkeep(Citizen* target)
 		if (profession == PROF_ASSASSIN)
 		{
 			attemptsOnTarget = 0;
+		}
+
+		if (curTarget->getSpecies() == "Imperial") // This is almost definitely going to be replaced later.
+		{
+			Imperial* profTest = static_cast<Imperial*>(curTarget);
+			if (profTest->getProfession() == PROF_ASSASSIN)
+			{
+				attemptsOnTarget = -1; // Assassins shouldn't get contracts for other assassins.
+			}
 		}
 	}
 
@@ -88,9 +106,9 @@ void Imperial::upkeep(Citizen* target)
 	{
 		bard();
 	}
-	else if (profession == PROF_ASSASSIN && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD))
+	else if (profession == PROF_ASSASSIN && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD) && attemptsOnTarget != -1)
 	{
-		//assassinate();
+		assassinate();
 	}
 	else if (profession == PROF_MERCHANT && (actionRoll < TRADE_CHANCE || checkWealth() < MIN_GOLD))
 	{
@@ -125,6 +143,80 @@ void Imperial::bard()
 		else
 		{
 			cout << "Audience: *Polite applause*" << endl;
+		}
+	}
+}
+
+// Assassins try to kill their target. Success is based on a simple combatRoll(), with modifiers added/subtracted based on stealth.
+// Whether or not the assassin successfully surprises their target depends on the assassin's jobSkill.
+// If the attempt is successful, they complete their contract, get paid, and a new target may be received on the next upkeep.
+// If it fails, the assassin might die (chance decreases if the target was surprised). They might also give up on the contract and choose a new target.
+void Imperial::assassinate()
+{
+	if (!getDead() && !curTarget->getDead())
+	{
+		// Death thresholds and how much gold a successful contract will pay.
+		const int CRIT_FAIL_NOSTEALTH = 30, CRIT_FAIL_STEALTH = 40, CONTRACT_WORTH = rand() % 11 + 5; // 5-15 gold
+
+		// Roll needs to be below this number for a successful surprise attack
+		const int STEALTH_THRESHOLD = jobSkill - (curTarget->getCombatSkill() / 2); // The higher the combatSkill, the more perceptive the target is?
+		int stealthRoll = rand() % 100;
+		bool targetSurprised = false;
+		if (stealthRoll < STEALTH_THRESHOLD)
+		{
+			targetSurprised = true;
+			cout << getName() << " sneaks up behind " << curTarget->getName() << "..." << endl;
+		}
+		else
+		{
+			cout << getName() << " tries to sneak up to " << curTarget->getName() << " but is spotted." << endl;
+		}
+		// Surprising the target gives a bonus, not doing so confers a penalty.
+		int combatModifier = 0;
+		if (targetSurprised)
+		{
+			combatModifier = 15;
+		}
+		else
+		{
+			combatModifier = -10;
+		}
+
+		// Assassinate
+		int myRoll = combatRoll() + combatModifier, theirRoll = curTarget->combatRoll();
+		// Success results in death of the target
+		if (myRoll > theirRoll)
+		{
+			cout << getName() << ": Hail Sithis!" << endl;
+			curTarget->kill();
+			cout << getName() << ": I should return to the sanctuary and turn in my contract." << endl;
+			getPaid(CONTRACT_WORTH);
+			attemptsOnTarget = -1;
+		}
+		// The assassin dies if the difference between theirRoll and myRoll is greater than the death thresholds.
+		else if (theirRoll - myRoll > CRIT_FAIL_STEALTH || (theirRoll - myRoll > CRIT_FAIL_NOSTEALTH && !targetSurprised))
+		{
+			cout << curTarget->getName() << ": Hah! This is what the Dark Brotherhood sends? Pathetic." << endl;
+			kill();
+		}
+		// Just a regular failure where the assassin gets away.
+		else
+		{
+			cout << curTarget->getName() << ": Blasted assassin, just die already!" << endl;
+
+
+			int giveUpChance = attemptsOnTarget * 10; // Each failed attempt makes the assassin more likely to give up.
+			int giveUpRoll = rand() % 100;
+			if (giveUpRoll < giveUpChance)
+			{
+				cout << getName() << ": Gah, I've had enough of this! *turns invisible and runs off*" << endl;
+				attemptsOnTarget = -1;
+			}
+			else
+			{
+				cout << getName() << ": Not today... *turns invisible and runs off*" << endl;
+				attemptsOnTarget++;
+			}
 		}
 	}
 }
