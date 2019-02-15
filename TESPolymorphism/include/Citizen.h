@@ -12,6 +12,7 @@ class Citizen
 		std::string getName();
 		std::string shortName();
 		std::string getSpecies();
+		std::string getProfession();
 		int checkWealth();
 		bool getDead();
 		int getCombatSkill();
@@ -28,6 +29,7 @@ class Citizen
 		bool isDead;
 		std::vector<std::string> dialogue;
 		std::vector<std::string> deities;
+		std::string profession;
 		Citizen* curTarget;
 		int speakChance;
 		int combatSkill;

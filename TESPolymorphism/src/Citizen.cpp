@@ -45,6 +45,10 @@ string Citizen::getSpecies()
 {
 	return species;
 }
+string Citizen::getProfession()
+{
+	return profession;
+}
 int Citizen::checkWealth()
 {
 	return money;

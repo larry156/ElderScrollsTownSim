@@ -11,16 +11,20 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 {
 	// The 8 Divines have already been set up in the Human constructor
 	// Determine profession
-	profession = rand() % 2; // 0 for Bard, 1 for Assassin, 2 for Merchant (Not yet implemented).
+	int professionRoll = rand() % 2; // 0 for Bard, 1 for Assassin, 2 for Merchant (Not yet implemented).
 
 	// Add some dialogue for Imperials. First add profession-related dialogue, then shared dialogue. Assassins also get two deities.
-	if (profession == PROF_BARD)
+	if (professionRoll == 0)
 	{
+		profession = "Bard";
+
 		dialogue.push_back("Care for a song, %targetfirst%?");
 		dialogue.push_back("I think my lute might be broken.");
 	}
-	else if (profession == PROF_ASSASSIN)
+	else if (professionRoll == 1)
 	{
+		profession = "Assassin";
+
 		deities.push_back("Sithis");
 		deities.push_back("The Night Mother");
 
@@ -29,9 +33,9 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 
 		attemptsOnTarget = -1; // A -1 means a new assassination target should be assigned.
 	}
-	else if (profession == PROF_MERCHANT)
+	else if (professionRoll == 2)
 	{
-
+		profession = "Merchant";
 	}
 	dialogue.push_back("Have you ever been to the Imperial City, %targetfirst%?");
 	dialogue.push_back("Apparently some \"Pirate Queen\" invaded the city of Anvil recently. I hope the people living there are okay.");
@@ -50,7 +54,7 @@ Imperial::~Imperial()
 	{
 		cout << getName() << " is still living in the town." << endl;
 	}
-	else if (profession != PROF_ASSASSIN)
+	else if (profession != "Assassin")
 	{
 		cout << getName() << " was buried in the town cemetery." << endl;
 	}
@@ -60,31 +64,23 @@ Imperial::~Imperial()
 	}
 }
 
-// Return an int representing this Imperial's profession.
-int Imperial::getProfession()
-{
-	return profession;
-}
-
 // Each upkeep, Imperials may speak, will pay taxes, and may perform an action based on their profession.
 void Imperial::upkeep(Citizen* target)
 {
 	// Set curTarget to the current target if this Imperial isn't an assassin or if they need a new target.
-	if (profession != PROF_ASSASSIN || attemptsOnTarget == -1)
+	if (profession != "Assassin" || attemptsOnTarget == -1)
 	{
 		curTarget = target;
 
-		if (profession == PROF_ASSASSIN)
+		if (profession == "Assassin")
 		{
-			attemptsOnTarget = 0;
-		}
-
-		if (curTarget->getSpecies() == "Imperial") // This is almost definitely going to be replaced later.
-		{
-			Imperial* profTest = static_cast<Imperial*>(curTarget);
-			if (profTest->getProfession() == PROF_ASSASSIN)
+			if (curTarget->getProfession() == "Assassin")
 			{
-				attemptsOnTarget = -1; // Assassins shouldn't get contracts for other assassins.
+				attemptsOnTarget = -1; // Assassins shouldn't really have contracts for other assassins.
+			}
+			else
+			{
+				attemptsOnTarget = 0;
 			}
 		}
 	}
@@ -102,15 +98,15 @@ void Imperial::upkeep(Citizen* target)
 	{
 		speak();
 	}
-	if (profession == PROF_BARD && (actionRoll < BARD_CHANCE || checkWealth() < MIN_GOLD))
+	if (profession == "Bard" && (actionRoll < BARD_CHANCE || checkWealth() < MIN_GOLD))
 	{
 		bard();
 	}
-	else if (profession == PROF_ASSASSIN && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD) && attemptsOnTarget != -1)
+	else if (profession == "Assassin" && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD) && attemptsOnTarget != -1)
 	{
 		assassinate();
 	}
-	else if (profession == PROF_MERCHANT && (actionRoll < TRADE_CHANCE || checkWealth() < MIN_GOLD))
+	else if (profession == "Merchant" && (actionRoll < TRADE_CHANCE || checkWealth() < MIN_GOLD))
 	{
 		//trade();
 	}
@@ -175,15 +171,17 @@ void Imperial::assassinate()
 		int combatModifier = 0;
 		if (targetSurprised)
 		{
-			combatModifier = 15;
+			combatModifier = 25;
 		}
 		else
 		{
 			combatModifier = -10;
 		}
+		//cout << "Combat modifier: " << combatModifier << endl;
 
 		// Assassinate
 		int myRoll = combatRoll() + combatModifier, theirRoll = curTarget->combatRoll();
+		//cout << "Assassin: " << myRoll << " Target: " << theirRoll << endl;
 		// Success results in death of the target
 		if (myRoll > theirRoll)
 		{

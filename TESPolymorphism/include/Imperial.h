@@ -15,8 +15,7 @@ class Imperial : public Human
 	protected:
 
 	private:
-		const int PROF_BARD = 0, PROF_ASSASSIN = 1, PROF_MERCHANT = 2;
-		int profession, attemptsOnTarget;
+		int attemptsOnTarget;
 		void bard();
 		void assassinate();
 		void trade();

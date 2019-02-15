@@ -230,7 +230,10 @@ int main()
 				rngTarget = rand() % townSize;
 			}
 			//cout << theTown[i]->getName() << " targeted a " << theTown[i]->getSpecies() << endl;
-			theTown[i]->upkeep(theTown[rngTarget]);
+			if (!theTown[i]->getDead())
+			{
+				theTown[i]->upkeep(theTown[rngTarget]);
+			}
 
 			if (!skipFormatting)
 			{

@@ -30,6 +30,7 @@ Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 3)
 	speakChance = rand() % 21 + 50; // Nords have a 50-70% chance of speaking.
 	brawlChance = rand() % 101; // Nords have a 0-100% chance of brawling someone.
 	combatSkill = rand() % 21 + 10; // Nords have a combatSkill between 10-30.
+	profession = "Hunter";
 	// Nords don't have a jobSkill (yet) because they were created before that was added. Hunting might be reworked to use it at some point though.
 
 	cout << getName() << " is a Nord of Skyrim." << endl;
