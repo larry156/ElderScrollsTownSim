@@ -11,7 +11,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 {
 	// The 8 Divines have already been set up in the Human constructor
 	// Determine profession
-	int professionRoll = rand() % 2; // 0 for Bard, 1 for Assassin, 2 for Merchant (Not yet implemented).
+	int professionRoll = rand() % 3; // 0 for Bard, 1 for Assassin, 2 for Merchant.
 
 	// Add some dialogue for Imperials. First add profession-related dialogue, then shared dialogue. Assassins also get two deities.
 	if (professionRoll == 0)
@@ -36,6 +36,10 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	else if (professionRoll == 2)
 	{
 		profession = "Merchant";
+
+		dialogue.push_back("Hey %targetfirst%, are these trinkets for sale?");
+		dialogue.push_back("I hope that caravan didn't get attacked by bandits again.");
+		dialogue.push_back("I might have to start sending my shipments by sea...");
 	}
 	dialogue.push_back("Have you ever been to the Imperial City, %targetfirst%?");
 	dialogue.push_back("Apparently some \"Pirate Queen\" invaded the city of Anvil recently. I hope the people living there are okay.");
@@ -68,7 +72,7 @@ Imperial::~Imperial()
 void Imperial::upkeep(Citizen* target)
 {
 	// Set curTarget to the current target if this Imperial isn't an assassin or if they need a new target.
-	if (profession != "Assassin" || attemptsOnTarget == -1)
+	if (profession != "Assassin" || attemptsOnTarget == -1 || curTarget->getDead())
 	{
 		curTarget = target;
 
@@ -108,7 +112,7 @@ void Imperial::upkeep(Citizen* target)
 	}
 	else if (profession == "Merchant" && (actionRoll < TRADE_CHANCE || checkWealth() < MIN_GOLD))
 	{
-		//trade();
+		trade();
 	}
 
 	if (!getDead())
@@ -214,6 +218,58 @@ void Imperial::assassinate()
 			{
 				cout << getName() << ": Not today... *turns invisible and runs off*" << endl;
 				attemptsOnTarget++;
+			}
+		}
+	}
+}
+
+// An Imperial can trade with their target for an item of some sort, then sell it to a caravan for a profit (hopefully. They can also lose money overall).
+void Imperial::trade()
+{
+	if (!getDead() && !curTarget->getDead())
+	{
+		const vector<string> ITEM_LIST = {"Cheese Wheel", "Stack of Books", "Akaviri Artifacts", "Essence of Mammoth", "Crate of Sweetrolls", "Blacksmith's Shipment", "Clothier's Shipment", "Woodworker's Shipment"};
+		const int ITEM_BASE_COST = rand() % 5 + 3; // Items have a base cost of 3-7 gold.
+		const int ITEM_BASE_SELLPRICE = ITEM_BASE_COST + 2; // The merchant can turn a profit of 2 gold by default.
+		int itemRoll = rand() % ITEM_LIST.size();
+
+		// Trade with target and pay them for goods.
+		const int CRIT_FAIL_RANGE = 50; // If tradeRoll - jobSkill is higher than this amount, the target won't even sell the merchant the item.
+		cout << getName() << ": Hey " << curTarget->shortName() << ", how much for this " << ITEM_LIST[itemRoll] << "?" << endl;
+		int tradeRoll = rand() % 100;
+		int itemCost = 0, itemSellPrice = 0;
+		if (tradeRoll - jobSkill > CRIT_FAIL_RANGE)
+		{
+			cout << curTarget->getName() << ": It's not for sale." << endl;
+		}
+		else
+		{
+			itemCost = ITEM_BASE_COST + (tradeRoll - jobSkill) / 20; // If tradeRoll is 10 and jobSkill is 30, the item is 1 gold cheaper.
+			cout << curTarget->getName() << ": You can have it for " << itemCost << " Gold." << endl;
+
+			if (checkWealth() < itemCost) // Merchant can't afford it.
+			{
+				cout << getName() << ": I'm afraid that's out of my price range." << endl;
+			}
+			else // Merchant can afford it
+			{
+				cout << getName() << ": I'll take it then." << endl;
+				payPerson(itemCost, curTarget, true);
+
+				// Now resell the item for a profit (hopefully)
+				tradeRoll = rand() % 100; // Reroll, since now the merchant has to convince the buyer.
+				cout << getName() << ": Now to find a buyer..." << endl;
+				if (tradeRoll - jobSkill > CRIT_FAIL_RANGE)
+				{
+					int deityRoll = rand() % deities.size();
+					cout << getName() << ": By " << deities[deityRoll] << ", there's nobody around that wants this " << ITEM_LIST[itemRoll] << "!" << endl;
+				}
+				else
+				{
+					itemSellPrice = ITEM_BASE_SELLPRICE + (jobSkill - tradeRoll) / 20; // If tradeRoll is 10 and jobSkill is 30, the item is sold for 1 more gold.
+					cout << getName() << " has sold their " << ITEM_LIST[itemRoll] << " for " << itemSellPrice << " Gold." << endl;
+					getPaid(itemSellPrice, false);
+				}
 			}
 		}
 	}
