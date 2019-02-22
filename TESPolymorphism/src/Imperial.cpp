@@ -17,6 +17,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	if (professionRoll == 0)
 	{
 		profession = "Bard";
+		profCombatSkillBonus = rand() % 6 + 2; // For some reason bards know how to fight in fantasy universes. Range between 2-7.
 
 		dialogue.push_back("Care for a song, %targetfirst%?");
 		dialogue.push_back("I think my lute might be broken.");
@@ -24,6 +25,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	else if (professionRoll == 1)
 	{
 		profession = "Assassin";
+		profCombatSkillBonus = rand() % 6 + 5; // Range between 5-10.
 
 		deities.push_back("Sithis");
 		deities.push_back("The Night Mother");
@@ -36,6 +38,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	else if (professionRoll == 2)
 	{
 		profession = "Merchant";
+		profCombatSkillBonus = rand() % 11 - 5; // Merchants are usually depicted as easy targets. Range between -5 to 5.
 
 		dialogue.push_back("Hey %targetfirst%, are these trinkets for sale?");
 		dialogue.push_back("I hope that caravan didn't get attacked by bandits again.");
@@ -45,11 +48,12 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	dialogue.push_back("Apparently some \"Pirate Queen\" invaded the city of Anvil recently. I hope the people living there are okay.");
 
 	speakChance = rand() % 21 + 50; // Imperials have a 50-70% chance of speaking.
-	combatSkill = rand() % 21; // Imperials have a combatSkill between 0-20.
+	combatSkill = rand() % 21 + profCombatSkillBonus; // Imperials have a combatSkill between 0-20, plus whatever bonus their profession gives them.
 	jobSkill = rand() % 61 + 20; // Imperials have a jobSkill between 20 and 80. It works pretty much as you'd expect for bards and merchants.
 	// For assassins, jobSkill determines how stealthy they are, while combat is still handled using combatSkill.
 
 	cout << getName() << " is an Imperial from Cyrodiil." << endl;
+	//listStats();
 }
 
 Imperial::~Imperial()
@@ -126,7 +130,7 @@ void Imperial::bard()
 {
 	if (!getDead())
 	{
-		const vector<string> SONG_LIST = {"The Dragonborn Comes", "Ragnar the Red", "Chim-El Adabal", "The Plane Meld", "The Tale of Syrabane", "Ithguleoir"};
+		const vector<string> SONG_LIST = {"The Dragonborn Comes", "Ragnar the Red", "Chim-El Adabal", "The Plane Meld", "The Tale of Syrabane", "Ithguleoir", "The Beauty of Dawn"};
 		int songRoll = rand() % SONG_LIST.size();
 		int bardRoll = rand() % 100;
 
@@ -228,7 +232,7 @@ void Imperial::trade()
 {
 	if (!getDead() && !curTarget->getDead())
 	{
-		const vector<string> ITEM_LIST = {"Cheese Wheel", "Stack of Books", "Akaviri Artifacts", "Essence of Mammoth", "Crate of Sweetrolls", "Blacksmith's Shipment", "Clothier's Shipment", "Woodworker's Shipment"};
+		const vector<string> ITEM_LIST = {"Cheese Wheel", "Stack of Books", "Akaviri Artifact", "Essence of Mammoth", "Crate of Sweetrolls", "Blacksmith's Shipment", "Clothier's Shipment", "Woodworker's Shipment"};
 		const int ITEM_BASE_COST = rand() % 5 + 3; // Items have a base cost of 3-7 gold.
 		const int ITEM_BASE_SELLPRICE = ITEM_BASE_COST + 2; // The merchant can turn a profit of 2 gold by default.
 		int itemRoll = rand() % ITEM_LIST.size();

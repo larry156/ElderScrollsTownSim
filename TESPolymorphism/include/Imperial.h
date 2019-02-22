@@ -10,7 +10,6 @@ class Imperial : public Human
 		Imperial(std::string myName);
 		virtual ~Imperial();
 		void upkeep(Citizen* target);
-		int getProfession(); // TODO: MOVE PROFESSIONS TO CITIZEN, TURN IT INTO A STRING.
 
 	protected:
 

@@ -16,6 +16,7 @@
 #include "BeastRace.h"
 #include "Nord.h"
 #include "Imperial.h"
+#include "Redguard.h"
 
 using namespace std;
 
@@ -35,10 +36,16 @@ void moveIn(Citizen* townArray[], map<string, vector<string>> &nameListsFirst, m
     {
         townArray[indexPos] = new Nord(nameGen(nameListsFirst["Nord"]) + " " + nameGen(nameListsLast["Nord"]));
     }
-    else
+    else if (raceRoll == 1)
     {
         townArray[indexPos] = new Imperial(nameGen(nameListsFirst["Imperial"]) + " " + nameGen(nameListsLast["Imperial"]));
     }
+    else if (raceRoll == 2)
+	{
+		const vector<string> PREFIXES = {"at-", "af-"};
+		int prefixRoll = rand() % PREFIXES.size();
+		townArray[indexPos] = new Redguard(nameGen(nameListsFirst["Redguard"]) + " " + PREFIXES[prefixRoll] + nameGen(nameListsFirst["Redguard"]));
+	}
     cout << endl;
 }
 
@@ -79,7 +86,7 @@ int main()
     //ifstream namesNordFirst("Names/nordNamesFirst.txt"), namesNordLast("Names/nordNamesFirst.txt");
     map<string, vector<string>> nameListsFirst, nameListsLast;
     cout << "Compiling list of names..." << endl;
-    // Read in Nord names
+    // Read in names
     if (readNames("Names/nordNamesFirst.txt", nameListsFirst["Nord"]))
 	{
 		return 1;
@@ -93,6 +100,10 @@ int main()
 		return 1;
 	}
 	if (readNames("Names/imperialNamesLast.txt", nameListsLast["Imperial"]))
+	{
+		return 1;
+	}
+	if (readNames("Names/redguardNames.txt", nameListsFirst["Redguard"])) // Redguards are named a bit differently than the other races.
 	{
 		return 1;
 	}

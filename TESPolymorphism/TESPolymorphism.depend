@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1550437418 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+1550873353 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
 	<iostream>
 	<fstream>
 	<cstdlib>
@@ -13,14 +13,15 @@
 	"BeastRace.h"
 	"Nord.h"
 	"Imperial.h"
+	"Redguard.h"
 
-1550437418 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1550456457 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<string>
 	<cstdlib>
 
-1550437418 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1550456236 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
@@ -49,14 +50,15 @@
 	<Citizen.h>
 	<string>
 
-1550437418 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
+1550875753 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
 	<algorithm>
 	<vector>
+	<tuple>
 
-1549665406 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
+1550874511 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
@@ -121,11 +123,11 @@
 	<algorithm>
 	<vector>
 
-1550439574 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
+1550801554 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
 	"Imperial.h"
 	<iostream>
 
-1550437418 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\imperial.h
+1550541401 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\imperial.h
 	<Human.h>
 	<string>
 
@@ -136,4 +138,14 @@
 1550239600 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\imperial.cpp
 	"Imperial.h"
 	<iostream>
+
+1550875718 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\redguard.cpp
+	"Redguard.h"
+	<iostream>
+	<cstdlib>
+	<tuple>
+
+1550541864 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\redguard.h
+	<Human.h>
+	<string>
 

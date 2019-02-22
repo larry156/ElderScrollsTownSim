@@ -1,12 +1,14 @@
 /* Name: Larry Y.
  * Date: February 3, 2019
  * Desc: The Nords of Skyrim. They have some unique deities, unique dialogue, and may hunt an animal or brawl a citizen. */
+ // As of February 22, 2019, Nords can now be adventurers as well.
 
 #include "Nord.h"
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
@@ -20,20 +22,44 @@ Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 3)
 	deities.push_back("Ysmir");
 	deities.push_back("Kyne"); // Kyne is a different version of Kynareth.
 
+	jobSkill = rand() % 51 + 25; // Nords have between 25 and 75 jobSkill.
+	const int JOB_THRESHOLD = 50; // A jobSkill below this is considered "bad".
+	int professionRoll = rand() % 2; // 0 for Hunter, 1 for Adventurer.
+	if (professionRoll == 1)
+	{
+		profession = "Hunter";
+		profCombatSkillBonus = rand() % 5 - 2; // Should be -2 to 2;
+
+		dialogue.push_back("I used to be an adventurer like you. Then I took an arrow in the knee.");
+	}
+	else
+	{
+		profession = "Adventurer";
+		if (jobSkill < JOB_THRESHOLD) // If an adventurer is bad at their job, they're probably not great at fighting...
+		{
+			profCombatSkillBonus = rand() % 11 * -1;
+		}
+		else
+		{
+			profCombatSkillBonus = rand() % 11 + 5; // Otherwise, they get a bonus to combatSkill ranging from 5 to 15 points.
+		}
+
+		dialogue.push_back("Be careful on the roads, %targetfirst%. There's been reports of bandits recently.");
+	}
+
 	// Nord-specific dialogue
 	dialogue.push_back("Someone steal your sweetroll, %targetfirst%?");
-	dialogue.push_back("I used to be an adventurer like you. Then I took an arrow in the knee.");
+
 	dialogue.push_back("%target% seems like a milk-drinker to me.");
 	dialogue.push_back("Have you seen those warriors from Hammerfell? They have curved swords.");
 	dialogue.push_back("%deity%'s blessings be upon you, %target%.");
 
 	speakChance = rand() % 21 + 50; // Nords have a 50-70% chance of speaking.
 	brawlChance = rand() % 101; // Nords have a 0-100% chance of brawling someone.
-	combatSkill = rand() % 21 + 10; // Nords have a combatSkill between 10-30.
-	profession = "Hunter";
-	// Nords don't have a jobSkill (yet) because they were created before that was added. Hunting might be reworked to use it at some point though.
+	combatSkill = rand() % 21 + 10 + profCombatSkillBonus; // Nords have a combatSkill between 10-30, plus whatever their profession gives them.
 
 	cout << getName() << " is a Nord of Skyrim." << endl;
+	//listStats();
 }
 Nord::~Nord()
 {
@@ -66,9 +92,13 @@ void Nord::upkeep(Citizen* target)
 	{
 		brawl();
 	}
-	else if (huntRoll == 0)
+	else if (huntRoll == 0 && profession == "Hunter")
 	{
 		hunt();
+	}
+	else if (profession == "Adventurer")
+	{
+		adventure();
 	}
 
 	if (!getDead())
@@ -161,5 +191,89 @@ void Nord::brawl()
 			cout << loser->getName() << ": Alright alright I concede! No more! Take your winnings and leave, " << winner->shortName() << "!" << endl;
 			loser->payPerson(WINNINGS, winner, true);
 		}
+	}
+}
+
+// Adventuring functionality copied over from the Redguard class.
+void Nord::adventure()
+{
+	if (!getDead())
+	{
+		const vector<string> EXPLORABLES = {"an Ancient Crypt", "a Nordic Ruin", "a Dwemer Ruin", "a Ruined Fort"};
+		int toExplore = rand() % EXPLORABLES.size();
+		vector<tuple<string, int>> enemyList; // Key = Name of Enemy, Value = combatSkill of enemy. Enemies are only fought if the adventurer fails a jobSkill roll.
+		// Some generic enemies that are found in all ruins
+		enemyList.push_back(make_tuple("Bandit", 3));
+		enemyList.push_back(make_tuple("Bandit Chief", 15));
+		enemyList.push_back(make_tuple("Warlock", 10));
+		enemyList.push_back(make_tuple("Necromancer", 15));
+		// Ruin-specific enemies
+		if (EXPLORABLES[toExplore] == "an Ancient Crypt") // Ancient Crypts can have various pests and undead within.
+		{
+			enemyList.push_back(make_tuple("Spider", 5));
+			enemyList.push_back(make_tuple("Vampire", 15));
+			enemyList.push_back(make_tuple("Vampire's Thrall", 7));
+			enemyList.push_back(make_tuple("Skeever", -2)); // These are essentially large rats.
+			enemyList.push_back(make_tuple("Draugr", 0));
+			enemyList.push_back(make_tuple("Ghost", 10));
+			enemyList.push_back(make_tuple("Skeleton", -5)); // Skeletons are very fragile.
+		}
+		else if (EXPLORABLES[toExplore] == "a Nordic Ruin") // Nordic ruins can have spiders, draugr, and skeletons.
+		{
+			enemyList.push_back(make_tuple("Spider", 5)); // It might seem kind of weird that giant spiders are stronger than draugr.
+			enemyList.push_back(make_tuple("Draugr", 0)); // This is because spiders might be venomous, while draugr are usually kind of weak.
+			enemyList.push_back(make_tuple("Skeleton", -5));
+		}
+		else if (EXPLORABLES[toExplore] == "a Dwemer Ruin") // Dwarven ruins can have various automotons inside, as well as falmer and chaurus.
+		{
+			enemyList.push_back(make_tuple("Dwarven Spider", 7)); // Not actually a real spider.
+			enemyList.push_back(make_tuple("Dwarven Sphere", 15)); // Is sometimes a sphere.
+			enemyList.push_back(make_tuple("Dwarven Centurion", 40)); // These are very big.
+			enemyList.push_back(make_tuple("Falmer", 5));
+			enemyList.push_back(make_tuple("Chaurus", 10));
+		}
+		else if (EXPLORABLES[toExplore] == "a Ruined Fort")
+		{
+			enemyList.push_back(make_tuple("Ghost", 10));
+			enemyList.push_back(make_tuple("Spriggan", 7));
+			enemyList.push_back(make_tuple("Skeleton", -5));
+		}
+
+		cout << getName() << " is exploring " << EXPLORABLES[toExplore] << "." << endl;
+		int doCombatRoll = rand() % 100, jobRoll = rand() % 100;
+		int treasure = rand() % 11 + 3 + ((jobSkill - jobRoll) / 10); // How much treasure the adventurer finds is dependant on their skill.
+		if (doCombatRoll > jobSkill) // If the roll fails, there's a monster lurking inside.
+		{
+			int enemyRoll = rand() % enemyList.size();
+			string enemyName = get<0>(enemyList[enemyRoll]);
+			int enemyCombatSkill = get<1>(enemyList[enemyRoll]);
+			cout << getName() << " has encountered a " << enemyName << " within the ruins!" << endl;
+
+			int myRoll = combatRoll(), theirRoll = rand() % 101 + enemyCombatSkill;
+			const int DEATH_RANGE = 35; // If theirRoll - myRoll is greater than this number, the adventurer dies.
+			if (theirRoll - myRoll > DEATH_RANGE)
+			{
+				cout << "The " << enemyName << " has mortally wounded " << getName() << "!" << endl;
+				kill();
+				return;
+			}
+			else if (theirRoll > myRoll)
+			{
+				cout << getName() << ": Shor's bones, I'm going to need to see a healer after this..." << endl;
+				return;
+			}
+			else
+			{
+				cout << getName() << ": Now that was a good fight! Let's see what that " << enemyName << " was hiding..." << endl;
+				int bonusGold = rand() % 6; // Some extra gold for defeating an enemy successfully.
+				treasure += bonusGold;
+			}
+		}
+		else
+		{
+			cout << getName() << ": Hmm, this place is empty. Maybe there's still some treasure left..." << endl;
+		}
+		cout << getName() << " has found treasure worth " << treasure << " Gold within the ruins." << endl;
+		getPaid(treasure, false);
 	}
 }

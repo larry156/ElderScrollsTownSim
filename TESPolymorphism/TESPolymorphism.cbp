@@ -40,6 +40,7 @@
 		<Unit filename="include/Imperial.h" />
 		<Unit filename="include/Mer.h" />
 		<Unit filename="include/Nord.h" />
+		<Unit filename="include/Redguard.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/BeastRace.cpp" />
 		<Unit filename="src/Citizen.cpp" />
@@ -47,6 +48,7 @@
 		<Unit filename="src/Imperial.cpp" />
 		<Unit filename="src/Mer.cpp" />
 		<Unit filename="src/Nord.cpp" />
+		<Unit filename="src/Redguard.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

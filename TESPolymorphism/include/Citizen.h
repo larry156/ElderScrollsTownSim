@@ -24,6 +24,7 @@ class Citizen
 		virtual void upkeep(Citizen* target) = 0;
 		virtual void kill();
 		void replaceString(std::string &theString, std::string replaceThis, std::string replaceWith); // Used to replace things like %target% with actual words/names.
+		void listStats(); // Used for debug purposes.
 
 	protected:
 		bool isDead;
@@ -33,6 +34,7 @@ class Citizen
 		Citizen* curTarget;
 		int speakChance;
 		int combatSkill;
+		int profCombatSkillBonus; // Some professions get a bonus or malus to their combat skill.
 		int jobSkill;
 
 	private:

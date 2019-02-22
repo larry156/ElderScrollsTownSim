@@ -164,3 +164,10 @@ void Citizen::replaceString(string &theString, string replaceThis, string replac
 		pos += replaceWith.length();
 	}
 }
+
+// List this Citizen's stats.
+void Citizen::listStats()
+{
+	cout << getName() << ": " << getSpecies() << " Profession: " << profession << endl;
+	cout << "Wealth: " << checkWealth() << " combatSkill: " << combatSkill << " jobSkill: " << jobSkill << endl;
+}

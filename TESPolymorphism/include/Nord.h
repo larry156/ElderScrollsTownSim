@@ -17,6 +17,7 @@ class Nord : public Human
 	private:
 		void hunt();
 		void brawl();
+		void adventure();
 		int brawlChance;
 };
 
