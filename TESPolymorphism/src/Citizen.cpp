@@ -102,15 +102,20 @@ void Citizen::payTaxes()
 	{
 		cout << getName() << " is dead. Dead people don't pay taxes." << endl;
 	}
-	else if (money >= taxAmount)
-	{
-		money -= taxAmount;
-		cout << getName() << " has paid " << taxAmount << " Gold in taxes." << endl;
-	}
 	else
 	{
-		cout << getName() << " has been executed for not paying taxes!" << endl;
-		kill();
+		int taxToPay = taxAmount + (checkWealth() * 3 / 100);
+
+		if (money >= taxToPay)
+		{
+			money -= taxToPay;
+			cout << getName() << " has paid " << taxToPay << " Gold in taxes." << endl;
+		}
+		else
+		{
+			cout << getName() << " has been executed for not paying taxes!" << endl;
+			kill();
+		}
 	}
 }
 void Citizen::getPaid(int toPay, bool showMessage)

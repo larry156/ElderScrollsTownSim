@@ -157,7 +157,7 @@ void Imperial::bard()
 // If it fails, the assassin might die (chance decreases if the target was surprised). They might also give up on the contract and choose a new target.
 void Imperial::assassinate()
 {
-	if (!getDead() && !curTarget->getDead())
+	if (!getDead() && !curTarget->getDead() && curTarget->getProfession() != "Assassin")
 	{
 		// Death thresholds and how much gold a successful contract will pay.
 		const int CRIT_FAIL_NOSTEALTH = 30, CRIT_FAIL_STEALTH = 40, CONTRACT_WORTH = rand() % 11 + 5; // 5-15 gold

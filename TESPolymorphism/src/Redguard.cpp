@@ -153,7 +153,7 @@ void Redguard::adventure()
 			enemyList.push_back(make_tuple("Falmer", 5));
 			enemyList.push_back(make_tuple("Chaurus", 10));
 		}
-		else if (EXPLORABLES[toExplore] == "a Ruined Fort");
+		else if (EXPLORABLES[toExplore] == "a Ruined Fort")
 		{
 			enemyList.push_back(make_tuple("Ghost", 10));
 			enemyList.push_back(make_tuple("Spriggan", 7));
@@ -163,6 +163,11 @@ void Redguard::adventure()
 		cout << getName() << " is exploring " << EXPLORABLES[toExplore] << "." << endl;
 		int doCombatRoll = rand() % 100, jobRoll = rand() % 100;
 		int treasure = rand() % 11 + 3 + ((jobSkill - jobRoll) / 10); // How much treasure the adventurer finds is dependant on their skill.
+		// Treasure should always be worth at least 1 gold.
+		if (treasure < 1)
+		{
+			treasure = 1;
+		}
 		if (doCombatRoll > jobSkill) // If the roll fails, there's a monster lurking inside.
 		{
 			int enemyRoll = rand() % enemyList.size();

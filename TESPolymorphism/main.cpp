@@ -32,6 +32,7 @@ string nameGen(vector<string> &nameList)
 void moveIn(Citizen* townArray[], map<string, vector<string>> &nameListsFirst, map<string, vector<string>> &nameListsLast, int indexPos)
 {
     int raceRoll = rand() % nameListsFirst.size();
+    //raceRoll = 1;
     if (raceRoll == 0)
     {
         townArray[indexPos] = new Nord(nameGen(nameListsFirst["Nord"]) + " " + nameGen(nameListsLast["Nord"]));
@@ -78,8 +79,8 @@ int main()
 	// Get console handle & set up colours.
     // Colours may look different on some computers.
     HANDLE consHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    const int C_GRAY = 8, C_TURQUOISE = 3, C_YELLOW = 14, C_WHITE = 15, C_ERROR = 244, C_WARNING = 12;
-    SetConsoleTextAttribute(consHandle, C_WHITE); // For some reason the default console colour is actually a light shade of gray.
+    const int C_GRAY = 8, C_TURQUOISE = 3, C_YELLOW = 14, C_DEFAULT = 15, C_ERROR = 244, C_WARNING = 12;
+    SetConsoleTextAttribute(consHandle, C_DEFAULT); // For some reason the default console colour is actually a light shade of gray.
 
     // Read in names from text files and store them in 2 vectors; one for first names, one for last names.
     // Names were generated using fantasynamegenerators.com
@@ -111,7 +112,7 @@ int main()
 	//cout << "There are " << nameListsFirst.size() << " races." << endl;
 
 	// Should be at least 4, must be greater than 1.
-	int townSize = 6;
+	int townSize = 7;
 	// Make sure the number of citizens is reasonable.
 	if (townSize < 1)
 	{
@@ -129,7 +130,7 @@ int main()
 	{
 		SetConsoleTextAttribute(consHandle, C_WARNING);
 		cout << "Warning: Very large town sizes are not supported. Enter \"IGNORE\" to ignore this and continue (Not recommended)." << endl;
-		SetConsoleTextAttribute(consHandle, C_WHITE);
+		SetConsoleTextAttribute(consHandle, C_DEFAULT);
 
 		string ignoreThis;
 		cout << "Ignore? ";
@@ -150,7 +151,7 @@ int main()
 		cout << "Warning: It may be hard to keep track of the town with sizes over 10." << endl;
 	}
 
-	SetConsoleTextAttribute(consHandle, C_WHITE);
+	SetConsoleTextAttribute(consHandle, C_DEFAULT);
 
 	Citizen* theTown[townSize];
 
@@ -217,7 +218,7 @@ int main()
 		}
 
     	// Do upkeep actions for each person.
-    	SetConsoleTextAttribute(consHandle, C_WHITE);
+    	SetConsoleTextAttribute(consHandle, C_DEFAULT);
 		for (int i = 0; i < townSize; i++)
 		{
 			// If a citizen was dead at the start of their upkeep, then two empty lines would be output to the console. This prevents that.
@@ -264,7 +265,7 @@ int main()
     {
         delete theTown[i];
     }
-    SetConsoleTextAttribute(consHandle, C_WHITE);
+    SetConsoleTextAttribute(consHandle, C_DEFAULT);
 
     return 0;
 }

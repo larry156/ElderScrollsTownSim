@@ -242,6 +242,11 @@ void Nord::adventure()
 		cout << getName() << " is exploring " << EXPLORABLES[toExplore] << "." << endl;
 		int doCombatRoll = rand() % 100, jobRoll = rand() % 100;
 		int treasure = rand() % 11 + 3 + ((jobSkill - jobRoll) / 10); // How much treasure the adventurer finds is dependant on their skill.
+		// Treasure should always be worth at least 1 gold.
+		if (treasure < 1)
+		{
+			treasure = 1;
+		}
 		if (doCombatRoll > jobSkill) // If the roll fails, there's a monster lurking inside.
 		{
 			int enemyRoll = rand() % enemyList.size();
