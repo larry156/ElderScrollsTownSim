@@ -26,7 +26,7 @@ Redguard::Redguard(string myName) : Human(myName, "Redguard", 10, 20, 3)
 
 	jobSkill = rand() % 51 + 30; // 30-80 jobSkill.
 	const int JOB_THRESHOLD = 50; // A jobSkill below this is considered "bad".
-	int professionRoll = 0;//rand() % 2; // 0 for Adventurer, 1 for Mercenary.
+	int professionRoll = rand() % 2; // 0 for Adventurer, 1 for Mercenary.
 	if (professionRoll == 0)
 	{
 		profession = "Adventurer";
@@ -40,6 +40,7 @@ Redguard::Redguard(string myName) : Human(myName, "Redguard", 10, 20, 3)
 		}
 
 		dialogue.push_back("Be careful on the roads, %targetfirst%. There's been reports of bandits recently.");
+		dialogue.push_back("These ancient ruins are surprisingly well-maintained.");
 	}
 	else
 	{
@@ -54,7 +55,7 @@ Redguard::Redguard(string myName) : Human(myName, "Redguard", 10, 20, 3)
 		}
 
 		dialogue.push_back("Let's see if I have a new contract today...");
-		dialogue.push_back("You know, maybe I should join the Fighter's Guild.");
+		dialogue.push_back("You know, %targetfirst%, you should consider joining the Fighter's Guild.");
 	}
 
 	// Add some dialogue
@@ -105,7 +106,7 @@ void Redguard::upkeep(Citizen* target)
 	}
 	else if (profession == "Mercenary" && (actionRoll < MERCENARY_CHANCE || checkWealth() < MIN_GOLD))
 	{
-		//mercenary();
+		mercenary();
 	}
 
 	if (!getDead())
@@ -202,4 +203,52 @@ void Redguard::adventure()
 		cout << getName() << " has found treasure worth " << treasure << " Gold within the ruins." << endl;
 		getPaid(treasure, false);
 	}
+}
+
+// Mercenaries get hired to go fight monsters, bandits, etc. Similar to adventuring, but more combat-based.
+void Redguard::mercenary()
+{
+	// Create enemies using the same method as above.
+	// Enemies are generally tougher than the ones faced by adventurers, but mercenaries will always be paid 12 gold for a successful contract.
+	vector<tuple<string, int>> enemyList;
+	enemyList.push_back(make_tuple("Bandit Chief", 15));
+	enemyList.push_back(make_tuple("Daedroth", 25));
+	enemyList.push_back(make_tuple("Frost Troll", 25));
+	enemyList.push_back(make_tuple("Giant", 30));
+
+	// Pick an enemy to fight
+	int enemyRoll = rand() % enemyList.size();
+	string enemyName = get<0>(enemyList[enemyRoll]);
+	int enemyCombatSkill = get<1>(enemyList[enemyRoll]);
+	cout << getName() << ": Looks like I have a contract to take out a " << enemyName << " today." << endl;
+
+	// Fight it
+	int myRoll = combatRoll(), theirRoll = rand() % 101 + enemyCombatSkill;
+	// A mercenary with a jobSkill of 50 will die if theirRoll - myRoll > 30.
+	// With a jobSkill of 55, they die if theirRoll - myRoll > 31.
+	// With a jobSkill of 45, they die if theirRoll - myRoll > 29.
+	const int DEATH_RANGE = 30 + (jobSkill - 50) / 5;
+	if (theirRoll - myRoll > DEATH_RANGE)
+	{
+		cout << "The " << enemyName << " has mortally wounded " << getName() << "!" << endl;
+		kill();
+		return;
+	}
+	else if (theirRoll > myRoll)
+	{
+		cout << getName() << ": Blast it! Looks like I'll be limping back to the Guild hall." << endl;
+		return;
+	}
+	else if (myRoll - theirRoll > DEATH_RANGE)
+	{
+		cout << getName() << ": A flawless victory. I should return to the Fighter's Guild." << endl;
+	}
+	else
+	{
+		cout << getName() << ": Ugh, that " << enemyName << " hits hard. Glad that's over with." << endl;
+	}
+
+	// Get paid, if the contract was not a failure.
+	cout << getName() << " has received 12 Gold for successfully completing a Fighter's Guild contract." << endl;
+	getPaid(12, false);
 }

@@ -45,6 +45,7 @@ Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 3)
 		}
 
 		dialogue.push_back("Be careful on the roads, %targetfirst%. There's been reports of bandits recently.");
+		dialogue.push_back("These ancient ruins are surprisingly well-maintained.");
 	}
 
 	// Nord-specific dialogue
