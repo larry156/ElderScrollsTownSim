@@ -2,9 +2,9 @@
 #define MER_H
 
 #include <Citizen.h>
+#include <string>
 
-
-class Mer : protected Citizen
+class Mer : public Citizen
 {
 	public:
 		Mer(std::string myName, std::string mySpecies, int startMoneyMin, int startMoneyMax, int speciesTaxAmount);

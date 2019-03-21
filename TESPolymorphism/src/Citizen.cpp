@@ -61,6 +61,10 @@ int Citizen::getCombatSkill()
 {
 	return combatSkill;
 }
+int Citizen::getJobSkill()
+{
+	return jobSkill;
+}
 
 // As the name implies, used for combat. Returns a random number between 0 and 100 + this Citizen's combatSkill.
 int Citizen::combatRoll()

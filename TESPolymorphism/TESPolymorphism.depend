@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1551064412 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
+1552962360 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\main.cpp
 	<iostream>
 	<fstream>
 	<cstdlib>
@@ -14,14 +14,15 @@
 	"Nord.h"
 	"Imperial.h"
 	"Redguard.h"
+	"Altmer.h"
 
-1551064875 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1552962590 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<string>
 	<cstdlib>
 
-1550459836 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1552962594 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
@@ -38,8 +39,9 @@
 	<iostream>
 	<cstdlib>
 
-1549669006 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
+1552867674 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\mer.h
 	<Citizen.h>
+	<string>
 
 1549373254 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\human.cpp
 	"Human.h"
@@ -139,7 +141,7 @@
 	"Imperial.h"
 	<iostream>
 
-1551062967 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\redguard.cpp
+1552772327 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\redguard.cpp
 	"Redguard.h"
 	<iostream>
 	<cstdlib>
@@ -147,5 +149,13 @@
 
 1550545464 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\redguard.h
 	<Human.h>
+	<string>
+
+1553134847 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\altmer.cpp
+	"Altmer.h"
+	<iostream>
+
+1552864045 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\altmer.h
+	<Mer.h>
 	<string>
 

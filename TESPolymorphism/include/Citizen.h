@@ -16,6 +16,7 @@ class Citizen
 		int checkWealth();
 		bool getDead();
 		int getCombatSkill();
+		int getJobSkill();
 		int combatRoll();
 		void payPerson(int toPay, Citizen* recipient, bool requireSufficientMoney = false, bool isTheft = false);
 		void payTaxes();

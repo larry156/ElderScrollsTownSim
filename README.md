@@ -10,16 +10,16 @@ Whoever has the higher roll wins that fight.
 # COMPLETED
 - Nords
 - Imperials
+- Redguards
 
 # PARTIALLY IMPLEMENTED
 - Town Features
-- Redguards
+- Altmer
 
 # TODO
 - Bretons
 - Orsimer
 - Dunmer
-- Altmer
 - Bosmer
 - Khajiit
 - Argonians

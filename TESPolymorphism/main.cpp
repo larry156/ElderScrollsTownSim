@@ -17,6 +17,7 @@
 #include "Nord.h"
 #include "Imperial.h"
 #include "Redguard.h"
+#include "Altmer.h"
 
 using namespace std;
 
@@ -46,6 +47,18 @@ void moveIn(Citizen* townArray[], map<string, vector<string>> &nameListsFirst, m
 		const vector<string> PREFIXES = {"at-", "af-"};
 		int prefixRoll = rand() % PREFIXES.size();
 		townArray[indexPos] = new Redguard(nameGen(nameListsFirst["Redguard"]) + " " + PREFIXES[prefixRoll] + nameGen(nameListsFirst["Redguard"]));
+	}
+	else if (raceRoll == 3)
+	{
+		int isHoRMember = 0;//rand() % 3; // 33% chance of being House of Reveries. (Not enough unique names)
+		if (isHoRMember == 0)
+		{
+			townArray[indexPos] = new Altmer(nameGen(nameListsFirst["HouseOfReveries"]), true);
+		}
+		else
+		{
+			townArray[indexPos] = new Altmer(nameGen(nameListsFirst["Altmer"]) + " " + nameGen(nameListsLast["Altmer"]));
+		}
 	}
     cout << endl;
 }
@@ -105,6 +118,18 @@ int main()
 		return 1;
 	}
 	if (readNames("Names/redguardNames.txt", nameListsFirst["Redguard"])) // Redguards are named a bit differently than the other races.
+	{
+		return 1;
+	}
+	//if (readNames("Names/altmerNamesFirst.txt", nameListsFirst["Altmer"]))
+	//{
+	//	return 1;
+	//}
+	//if (readNames("Names/altmerNamesLast.txt", nameListsLast["Altmer"]))
+	//{
+	//	return 1;
+	//}
+	if (readNames("Names/HoRNames.txt", nameListsFirst["HouseOfReveries"])) // Only used by Altmer for now, might be used by some other races later.
 	{
 		return 1;
 	}
