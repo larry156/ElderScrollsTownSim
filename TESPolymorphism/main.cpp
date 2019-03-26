@@ -50,10 +50,10 @@ void moveIn(Citizen* townArray[], map<string, vector<string>> &nameListsFirst, m
 	}
 	else if (raceRoll == 3)
 	{
-		int isHoRMember = 0;//rand() % 3; // 33% chance of being House of Reveries. (Not enough unique names)
+		int isHoRMember = rand() % 3; // 33% chance of being House of Reveries. (Not enough unique names)
 		if (isHoRMember == 0)
 		{
-			townArray[indexPos] = new Altmer(nameGen(nameListsFirst["HouseOfReveries"]), true);
+			townArray[indexPos] = new Altmer(nameGen(nameListsLast["HouseOfReveries"]), true);
 		}
 		else
 		{
@@ -121,15 +121,16 @@ int main()
 	{
 		return 1;
 	}
-	//if (readNames("Names/altmerNamesFirst.txt", nameListsFirst["Altmer"]))
-	//{
-	//	return 1;
-	//}
-	//if (readNames("Names/altmerNamesLast.txt", nameListsLast["Altmer"]))
-	//{
-	//	return 1;
-	//}
-	if (readNames("Names/HoRNames.txt", nameListsFirst["HouseOfReveries"])) // Only used by Altmer for now, might be used by some other races later.
+	if (readNames("Names/altmerNamesFirst.txt", nameListsFirst["Altmer"]))
+	{
+		return 1;
+	}
+	if (readNames("Names/altmerNamesLast.txt", nameListsLast["Altmer"]))
+	{
+		return 1;
+	}
+	if (readNames("Names/HoRNames.txt", nameListsLast["HouseOfReveries"])) // Only used by Altmer for now, might be used by some other races later.
+	// Uses nameListsLast because nameListsFirst is used to determine number of races.
 	{
 		return 1;
 	}

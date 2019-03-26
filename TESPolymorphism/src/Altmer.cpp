@@ -33,9 +33,12 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 		profCombatSkillBonus = rand() % 11 + 2; // Bonus ranging from 2 to 12.
 		jobSkill = rand() % 61 + 30; // For mages, jobSkill determines how likely things are to go wrong when practicing magic.
 
-		dialogue.push_back("");
+		dialogue.push_back("Sorry, %targetfirst%, I'm busy with research right now and can't talk.");
+		dialogue.push_back("I could have sworn I left those potions around here somewhere...");
+		dialogue.push_back("Blast it, the scamps have gotten loose again...");
 	}
-	//dialogue.push_back("");
+	dialogue.push_back("This town is too cold. If only I were back in Summerset...");
+
 
 	speakChance = rand() % 21 + 50; // Altmer have a 50-70% chance of speaking.
 	combatSkill = rand() % 31 - 5 + profCombatSkillBonus; // Altmer have a combatSkill between -5 to 25, plus whatever their profession gives them.
