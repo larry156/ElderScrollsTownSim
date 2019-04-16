@@ -84,7 +84,6 @@ void Nord::upkeep(Citizen* target)
 	int huntRoll = rand() % 2;
 
 	// Now do upkeep
-	payTaxes();
 	if (speakRoll < speakChance)
 	{
 		speak();
@@ -101,6 +100,7 @@ void Nord::upkeep(Citizen* target)
 	{
 		adventure();
 	}
+	payTaxes();
 
 	if (!getDead())
 	{

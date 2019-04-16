@@ -64,7 +64,7 @@
 	<Human.h>
 	<string>
 
-1550238695 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\main.cpp
+1555422743 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\main.cpp
 	<iostream>
 	<fstream>
 	<cstdlib>
@@ -78,52 +78,56 @@
 	"BeastRace.h"
 	"Nord.h"
 	"Imperial.h"
+	"Redguard.h"
+	"Altmer.h"
 
-1550239025 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\citizen.h
+1555422765 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
-1550238704 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\human.h
+1555422766 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\human.h
 	<Citizen.h>
 	<string>
 
-1550238705 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\mer.h
+1555422769 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\mer.h
+	<Citizen.h>
+	<string>
+
+1555422762 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\beastrace.h
 	<Citizen.h>
 
-1550238702 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\beastrace.h
-	<Citizen.h>
-
-1550238706 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\nord.h
+1555422771 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\nord.h
 	<Human.h>
 	<string>
 
-1550238715 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\beastrace.cpp
+1555422789 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\beastrace.cpp
 	"BeastRace.h"
 	<iostream>
 	<cstdlib>
 
-1550239040 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\citizen.cpp
+1555422792 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<string>
 	<cstdlib>
 
-1550238718 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\human.cpp
+1555422799 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\human.cpp
 	"Human.h"
 	<iostream>
 	<cstdlib>
 
-1550238719 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\mer.cpp
+1555422806 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\mer.cpp
 	"Mer.h"
 	<iostream>
 	<cstdlib>
 
-1550239064 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\nord.cpp
+1555422808 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
 	<algorithm>
 	<vector>
+	<tuple>
 
 1551064203 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
 	"Imperial.h"
@@ -133,11 +137,11 @@
 	<Human.h>
 	<string>
 
-1550238876 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\imperial.h
+1555422768 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\imperial.h
 	<Human.h>
 	<string>
 
-1550239600 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\imperial.cpp
+1555422802 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\imperial.cpp
 	"Imperial.h"
 	<iostream>
 
@@ -158,4 +162,22 @@
 1555381401 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\altmer.h
 	<Mer.h>
 	<string>
+
+1555422773 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\redguard.h
+	<Human.h>
+	<string>
+
+1555422719 h:\profile\desktop\computer science\random stuff\tespolymorphism\include\altmer.h
+	<Mer.h>
+	<string>
+
+1555422810 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\redguard.cpp
+	"Redguard.h"
+	<iostream>
+	<cstdlib>
+	<tuple>
+
+1555423851 source:h:\profile\desktop\computer science\random stuff\tespolymorphism\src\altmer.cpp
+	"Altmer.h"
+	<iostream>
 

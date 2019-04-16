@@ -95,7 +95,6 @@ void Redguard::upkeep(Citizen* target)
 	const int MERCENARY_CHANCE = 60, MIN_GOLD = 5;
 
 	// Now do upkeep
-	payTaxes();
 	if (speakRoll < speakChance)
 	{
 		speak();
@@ -108,6 +107,7 @@ void Redguard::upkeep(Citizen* target)
 	{
 		mercenary();
 	}
+	payTaxes();
 
 	if (!getDead())
 	{

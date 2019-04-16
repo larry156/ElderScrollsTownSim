@@ -101,7 +101,6 @@ void Imperial::upkeep(Citizen* target)
 	const int BARD_CHANCE = 60, ASSASSIN_CHANCE = 90, TRADE_CHANCE = 60, MIN_GOLD = 5;
 
 	// Now do upkeep
-	payTaxes();
 	if (speakRoll < speakChance)
 	{
 		speak();
@@ -118,6 +117,7 @@ void Imperial::upkeep(Citizen* target)
 	{
 		trade();
 	}
+	payTaxes();
 
 	if (!getDead())
 	{

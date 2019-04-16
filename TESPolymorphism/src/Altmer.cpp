@@ -38,9 +38,11 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 		dialogue.push_back("Sorry, %targetfirst%, I'm busy with research right now and can't talk.");
 		dialogue.push_back("I could have sworn I left those potions around here somewhere...");
 		dialogue.push_back("Blast it, the scamps have gotten loose again...");
+		dialogue.push_back("I caught someone snooping around the other day. They were about to incinerate themselves with a dangerous artifact.");
+		dialogue.push_back("I should have stayed in Eyevea...");
 	}
 	dialogue.push_back("This town is too cold. If only I were back in Summerset...");
-
+	dialogue.push_back("Apparently something happened at the Crystal Tower recently. I wonder what?");
 
 	speakChance = rand() % 21 + 50; // Altmer have a 50-70% chance of speaking.
 	combatSkill = rand() % 31 - 5 + profCombatSkillBonus; // Altmer have a combatSkill between -5 to 25, plus whatever their profession gives them.
@@ -72,7 +74,6 @@ void Altmer::upkeep(Citizen* target)
 	const int BARD_CHANCE = 75, PERFORM_CHANCE = 65, MAGE_CHANCE = 100, MIN_GOLD = 5;
 
 	// Now do upkeep
-	payTaxes();
 	if (speakRoll < speakChance)
 	{
 		speak();
@@ -89,6 +90,7 @@ void Altmer::upkeep(Citizen* target)
 	{
 		mage();
 	}
+	payTaxes();
 
 	if (!getDead())
 	{
@@ -207,35 +209,46 @@ void Altmer::perform()
 // However, research takes time, so mages won't get paid every day (unless, of course, they are really good at their job (unlikely)).
 void Altmer::mage()
 {
-	const int PUBLISHING_QUALITY = 100; // Quality should be above this number in order to publish.
-	const int DEFAULT_PAY = 50, MIN_GOLD = 5; // If the mage has less than MIN_GOLD remaining, they will publish their work regardless of its quality.
-	const vector<string> RESEARCH_TOPICS = {"Daedra", "Restoration Magic", "Alteration Magic", "Destruction Magic", "Conjuration Magic", "Illusion Magic", "Alchemy", "Enchanting"};
+	if (!getDead())
+	{
+		const int PUBLISHING_QUALITY = 100; // Quality should be above this number in order to publish.
+		const int DEFAULT_PAY = 40, MIN_GOLD = 3; // If the mage has less than MIN_GOLD remaining, they will publish their work regardless of its quality.
+		const vector<string> RESEARCH_TOPICS = {"Daedra", "Restoration Magic", "Alteration Magic", "Destruction Magic", "Conjuration Magic", "Illusion Magic", "Alchemy", "Enchanting"};
 
-	if (researchTopic == -1)
-	{
-		researchTopic = rand() % RESEARCH_TOPICS.size();
-		cout << getName() << " begins researching the topic of " << RESEARCH_TOPICS[researchTopic] << "." << endl;
-	}
-	else if (researchQuality < 100 && checkWealth() >= MIN_GOLD)
-	{
-		cout << getName() << " continues their research into " << RESEARCH_TOPICS[researchTopic] << "." << endl;
-	}
-	else if (researchQuality >= 100 || checkWealth() < MIN_GOLD)
-	{
-		int qualityDiff = researchQuality - PUBLISHING_QUALITY;
-		int additionalPay = qualityDiff / 2; // Each additional point of quality is worth about 0.5 gold, with the total amount rounded down.
-		int randomPayAmount = rand() % 21 - 10; // -10 to +10 additional gold in addition to that given by quality.
-		int totalPay = DEFAULT_PAY + additionalPay + randomPayAmount;
-		cout << getName() << " has published their research on " << RESEARCH_TOPICS[researchTopic] << ", and received " << totalPay << " from the Mages Guild." << endl;
-		getPaid(totalPay, false);
-		// Reset topic and quality
-		researchQuality = 0;
-		researchTopic = -1;
-		return;
-	}
+		if (researchTopic == -1)
+		{
+			researchTopic = rand() % RESEARCH_TOPICS.size();
+			cout << getName() << " begins researching the topic of " << RESEARCH_TOPICS[researchTopic] << "." << endl;
+		}
+		else if (researchQuality < 100 && checkWealth() >= MIN_GOLD)
+		{
+			cout << getName() << " continues their research into " << RESEARCH_TOPICS[researchTopic] << "." << endl;
+		}
+		else if (researchQuality >= 100 || checkWealth() < MIN_GOLD)
+		{
+			int qualityDiff = researchQuality - PUBLISHING_QUALITY;
+			int additionalPay = qualityDiff / 2; // Each additional point of quality is worth about 0.5 gold, with the total amount rounded down.
+			int randomPayAmount = rand() % 21 - 10; // -10 to +10 additional gold in addition to that given by quality.
+			int totalPay = DEFAULT_PAY + additionalPay + randomPayAmount;
+			// The Guild shouldn't be taking away any money...
+			if (totalPay < 5)
+			{
+				totalPay = 5; // Minimum amount of Gold that can be received is 5.
+			}
 
-	// Increasing or decreasing quality.
-	const int CONST_QUALITY_INCREASE = 25; // On average it should take 4 days to finish something.
-	int skillModifier = rand() % (jobSkill + 1) - 40; // Increase in quality is dependent on jobSkill. The mage can also lower the quality of their work.
-	researchQuality += CONST_QUALITY_INCREASE + skillModifier;
+			//cout << "researchQuality: " << researchQuality << endl;
+			cout << getName() << " has published their research on " << RESEARCH_TOPICS[researchTopic] << ", and received " << totalPay << " Gold from the Mages Guild." << endl;
+			getPaid(totalPay, false);
+			// Reset topic and quality
+			researchQuality = 0;
+			researchTopic = -1;
+			return;
+		}
+
+		// Increasing or decreasing quality.
+		const int CONST_QUALITY_INCREASE = 25; // On average it should take 4 days to finish something.
+		int skillModifier = rand() % (jobSkill + 1) - 40; // Increase in quality is dependent on jobSkill. The mage can also lower the quality of their work.
+		researchQuality += CONST_QUALITY_INCREASE + skillModifier;
+		//cout << "researchQuality: " << researchQuality << endl;
+	}
 }
