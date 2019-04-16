@@ -30,6 +30,8 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 	else
 	{
 		profession = "Mage";
+		researchQuality = 0;
+		researchTopic = -1; // researchTopic of -1 indicates that they are not currently working on something.
 		profCombatSkillBonus = rand() % 11 + 2; // Bonus ranging from 2 to 12.
 		jobSkill = rand() % 61 + 30; // For mages, jobSkill determines how likely things are to go wrong when practicing magic.
 
@@ -67,7 +69,7 @@ void Altmer::upkeep(Citizen* target)
 	int actionRoll = rand() % 100;
 	// actionRoll needs to be below these thresholds for the Altmer to actually do something.
 	// If this Altmer has less than MIN_GOLD left, they will always do their job.
-	const int BARD_CHANCE = 75, PERFORM_CHANCE = 65, MAGE_CHANCE = 70, MIN_GOLD = 5;
+	const int BARD_CHANCE = 75, PERFORM_CHANCE = 65, MAGE_CHANCE = 100, MIN_GOLD = 5;
 
 	// Now do upkeep
 	payTaxes();
@@ -85,7 +87,7 @@ void Altmer::upkeep(Citizen* target)
 	}
 	else if (profession == "Mage" && (actionRoll < MAGE_CHANCE || checkWealth() < MIN_GOLD))
 	{
-		//mage();
+		mage();
 	}
 
 	if (!getDead())
@@ -133,7 +135,7 @@ void Altmer::perform()
 
 	// As mentioned in the Bard function, performers will always receive at some Gold from the troupe.
 	int tipChance = jobSkill; // Chance of getting tips from the audience.
-	int revenue = 7;
+	int revenue = 6;
 
 	//bool collaborate = false;
 	if (curTarget->getProfession() == "Performer")
@@ -154,7 +156,7 @@ void Altmer::perform()
 			int tipRoll = rand() % 100;
 			if (tipRoll < tipChance)
 			{
-				revenue += rand() % 6; // Up to 5 additional gold will be earned in tips.
+				revenue += rand() % 4; // Up to 3 additional gold will be earned in tips.
 				cout << getName() << " skillfully" << ACTIONS[actionOne] << " while " << curTarget->getName() << ACTIONS[actionTwo] << "." << endl;
 				cout << "The audience responds with cheers and roaring applause." << endl;
 			}
@@ -170,7 +172,7 @@ void Altmer::perform()
 			int tipRoll = rand() % 100;
 			if (tipRoll < tipChance)
 			{
-				revenue += rand() % 6; // Up to 5 additional gold will be earned in tips.
+				revenue += rand() % 4; // Up to 3 additional gold will be earned in tips.
 				cout << getName() << " and " << curTarget->getName() << COLLAB_ACTIONS[actionRoll] << ", earning cheers and vigorous applause from the audience." << endl;
 			}
 			else
@@ -189,7 +191,7 @@ void Altmer::perform()
 		int tipRoll = rand() % 100;
 		if (tipRoll < tipChance)
 		{
-			revenue += rand() % 6; // Up to 5 additional gold will be earned in tips.
+			revenue += rand() % 4; // Up to 3 additional gold will be earned in tips.
 			cout << getName() << " skillfully" << ACTIONS[actionRoll] << ", earning cheers and vigorous applause from the audience." << endl;
 		}
 		else
@@ -199,4 +201,41 @@ void Altmer::perform()
 		cout << getName() << " has earned " << revenue << " Gold for their performance." << endl;
 		getPaid(revenue, false);
 	}
+}
+
+// Mages will do research and publish their findings. If it does well, they get paid a large sum of money.
+// However, research takes time, so mages won't get paid every day (unless, of course, they are really good at their job (unlikely)).
+void Altmer::mage()
+{
+	const int PUBLISHING_QUALITY = 100; // Quality should be above this number in order to publish.
+	const int DEFAULT_PAY = 50, MIN_GOLD = 5; // If the mage has less than MIN_GOLD remaining, they will publish their work regardless of its quality.
+	const vector<string> RESEARCH_TOPICS = {"Daedra", "Restoration Magic", "Alteration Magic", "Destruction Magic", "Conjuration Magic", "Illusion Magic", "Alchemy", "Enchanting"};
+
+	if (researchTopic == -1)
+	{
+		researchTopic = rand() % RESEARCH_TOPICS.size();
+		cout << getName() << " begins researching the topic of " << RESEARCH_TOPICS[researchTopic] << "." << endl;
+	}
+	else if (researchQuality < 100 && checkWealth() >= MIN_GOLD)
+	{
+		cout << getName() << " continues their research into " << RESEARCH_TOPICS[researchTopic] << "." << endl;
+	}
+	else if (researchQuality >= 100 || checkWealth() < MIN_GOLD)
+	{
+		int qualityDiff = researchQuality - PUBLISHING_QUALITY;
+		int additionalPay = qualityDiff / 2; // Each additional point of quality is worth about 0.5 gold, with the total amount rounded down.
+		int randomPayAmount = rand() % 21 - 10; // -10 to +10 additional gold in addition to that given by quality.
+		int totalPay = DEFAULT_PAY + additionalPay + randomPayAmount;
+		cout << getName() << " has published their research on " << RESEARCH_TOPICS[researchTopic] << ", and received " << totalPay << " from the Mages Guild." << endl;
+		getPaid(totalPay, false);
+		// Reset topic and quality
+		researchQuality = 0;
+		researchTopic = -1;
+		return;
+	}
+
+	// Increasing or decreasing quality.
+	const int CONST_QUALITY_INCREASE = 25; // On average it should take 4 days to finish something.
+	int skillModifier = rand() % (jobSkill + 1) - 40; // Increase in quality is dependent on jobSkill. The mage can also lower the quality of their work.
+	researchQuality += CONST_QUALITY_INCREASE + skillModifier;
 }

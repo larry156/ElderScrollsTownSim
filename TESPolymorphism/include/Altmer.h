@@ -18,6 +18,7 @@ class Altmer : public Mer
 		void perform();
 		void bard();
 		void mage();
+		int researchQuality, researchTopic;
 };
 
 #endif // ALTMER_H
