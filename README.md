@@ -1,4 +1,4 @@
-# TESPolymorphism
+# Elder Scrolls Town Sim
 Inspired by a school assignment, though with improved features, a different theme, and some other changes.
 This is very much still a work in progress.
 
@@ -11,10 +11,13 @@ Whoever has the higher roll wins that fight.
 - Nords
 - Imperials
 - Redguards
+- Altmer
+
+# COMPLETED (FOR NOW)
+- Town Features
 
 # PARTIALLY IMPLEMENTED
-- Town Features
-- Altmer
+- Nothing here
 
 # TODO
 - Bretons
