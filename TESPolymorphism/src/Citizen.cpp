@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include "Town.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ Citizen::Citizen(string myName, string mySpecies, int startMoneyMin, int startMo
 	}
 
 	isDead = false;
+	hasLeft = false;
 	// This constructor has no console messages.
 }
 Citizen::~Citizen()
@@ -56,6 +58,10 @@ int Citizen::checkWealth()
 bool Citizen::getDead()
 {
 	return isDead;
+}
+bool Citizen::isLeaving()
+{
+	return hasLeft;
 }
 int Citizen::getCombatSkill()
 {
@@ -158,6 +164,36 @@ void Citizen::kill()
 	isDead = true;
 	cout << getName() << " has met their demise." << endl;
 }
+void Citizen::leave()
+{
+	hasLeft = true;
+	cout << getName() << " has left the town." << endl;
+}
+
+// Used to create targets within the town for Dark Brotherhood assassins
+void Citizen::blackSacrament()
+{
+	cout << getName() << " creates an effigy of " << curTarget->getName() << "..." << endl;
+	cout << getName() << ": Sweet Mother, sweet Mother, send your child unto me, for the sins of the unworthy must be baptized in blood and fear..." << endl;
+	bool alreadyATarget = false;
+	for (int i = 0; i < myTown->blackSacramentTargets.size(); i++)
+	{
+		if (myTown->blackSacramentTargets[i] == curTarget)
+		{
+			alreadyATarget = true;
+			break;
+		}
+	}
+	if (alreadyATarget || curTarget->getProfession() == "Assassin")
+	{
+		cout << "An unknown force has observed this event and ignored it." << endl;
+	}
+	else if (!alreadyATarget)
+	{
+		myTown->blackSacramentTargets.push_back(curTarget);
+		cout << "An unknown force has observed this event." << endl;
+	}
+}
 
 // Find something in a string and replace it. Used heavily for dialogue.
 void Citizen::replaceString(string &theString, string replaceThis, string replaceWith)
@@ -179,4 +215,10 @@ void Citizen::listStats()
 {
 	cout << getName() << ": " << getSpecies() << " Profession: " << profession << endl;
 	cout << "Wealth: " << checkWealth() << " combatSkill: " << combatSkill << " jobSkill: " << jobSkill << endl;
+}
+
+// Assign this Citizen to a Town
+void Citizen::setResidence(Town* newTown)
+{
+	myTown = newTown;
 }

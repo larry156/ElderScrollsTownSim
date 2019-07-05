@@ -4,6 +4,7 @@
 
 #include "Altmer.h"
 #include <iostream>
+#include "Town.h"
 
 using namespace std;
 
@@ -15,6 +16,9 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 		int specialization = 1;//rand() % 2; // Members can be either regular performers or bards
 		profCombatSkillBonus = rand() % 6 + 2; // Range between 2 to 7.
 		jobSkill = rand() % 51 + 50; // The House of Reveries doesn't just accept any random stranger with a lute... Range between 50-100.
+		daysUntilLeave = rand() % 365 + 30; // Will stay for at least 1 month, and at most 13 months.
+		daysInTown = 0;
+		blackSacramentChance = 0;
 
 		if (specialization == 0)
 		{
@@ -34,6 +38,9 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 		researchTopic = -1; // researchTopic of -1 indicates that they are not currently working on something.
 		profCombatSkillBonus = rand() % 11 + 2; // Bonus ranging from 2 to 12.
 		jobSkill = rand() % 61 + 30; // For mages, jobSkill determines how likely things are to go wrong when practicing magic.
+		blackSacramentChance = 3;
+		daysUntilLeave = 10;
+		daysInTown = 0;
 
 		dialogue.push_back("Sorry, %targetfirst%, I'm busy with research right now and can't talk.");
 		dialogue.push_back("I could have sworn I left those potions around here somewhere...");
@@ -52,7 +59,15 @@ Altmer::Altmer(string myName, bool isHoRMember) : Mer(myName, "Altmer", 10, 20, 
 
 Altmer::~Altmer()
 {
-	if (!getDead())
+	if (isLeaving() && (profession == "Bard" || profession == "Performer"))
+	{
+		cout << getName() << " has left for the Summerset Isles." << endl;
+	}
+	else if (isLeaving() && profession == "Mage")
+	{
+		cout << getName() << " summons a portal and walks through. The portal disappears." << endl;
+	}
+	else if (!getDead())
 	{
 		cout << getName() << " is still living in the town." << endl;
 	}
@@ -68,10 +83,33 @@ void Altmer::upkeep(Citizen* target)
 	// Set curTarget and roll for actions
 	curTarget = target;
 	int speakRoll = rand() % 100;
+	int sacramentRoll = rand() % 100;
 	int actionRoll = rand() % 100;
 	// actionRoll needs to be below these thresholds for the Altmer to actually do something.
 	// If this Altmer has less than MIN_GOLD left, they will always do their job.
 	const int BARD_CHANCE = 75, PERFORM_CHANCE = 65, MAGE_CHANCE = 100, MIN_GOLD = 5;
+
+	if ((profession == "Bard" || profession == "Performer") && daysInTown > daysUntilLeave)
+	{
+		cout << getName() << ": My time in this town is unfortunately nearing it's end. I wish you all the best, and if you have the time, come see the House of Reveries in Rellenthil!" << endl;
+		leave();
+		return;
+	}
+	else if (profession == "Mage" && checkWealth() < MAGE_LEAVE_GOLD_THRESHOLD)
+	{
+		daysInTown++;
+	}
+	else if (profession == "Mage")
+	{
+		daysInTown = 0;
+	}
+
+	if (profession == "Mage" && checkWealth() < MAGE_LEAVE_GOLD_THRESHOLD && daysInTown >= daysUntilLeave)
+	{
+		cout << getName() << ": Hmm, this town doesn't really provide me with many research opportunities. I think it's time to return to Eyevea." << endl;
+		leave();
+		return;
+	}
 
 	// Now do upkeep
 	if (speakRoll < speakChance)
@@ -90,11 +128,20 @@ void Altmer::upkeep(Citizen* target)
 	{
 		mage();
 	}
+	else if (sacramentRoll < blackSacramentChance)
+	{
+		blackSacrament();
+	}
 	payTaxes();
 
 	if (!getDead())
 	{
 		cout << getName() << " has " << checkWealth() << " Gold remaining." << endl;
+	}
+
+	if (profession == "Bard" || profession == "Performer")
+	{
+		daysInTown++;
 	}
 }
 
@@ -212,7 +259,8 @@ void Altmer::mage()
 	if (!getDead())
 	{
 		const int PUBLISHING_QUALITY = 100; // Quality should be above this number in order to publish.
-		const int DEFAULT_PAY = 40, MIN_GOLD = 3; // If the mage has less than MIN_GOLD remaining, they will publish their work regardless of its quality.
+		const int CRIT_FAIL_CHANCE = 10; // Chance of a failure causing a death.
+		const int DEFAULT_PAY = 40, MIN_GOLD = 4; // If the mage has less than MIN_GOLD remaining, they will publish their work regardless of its quality.
 		const vector<string> RESEARCH_TOPICS = {"Daedra", "Restoration Magic", "Alteration Magic", "Destruction Magic", "Conjuration Magic", "Illusion Magic", "Alchemy", "Enchanting"};
 
 		if (researchTopic == -1)
@@ -242,6 +290,27 @@ void Altmer::mage()
 			// Reset topic and quality
 			researchQuality = 0;
 			researchTopic = -1;
+			return;
+		}
+
+		int failRoll = rand() % 100;
+		if (failRoll > jobSkill) // The higher the jobSkill, the less likely things are to go wrong.
+		{
+			int critFailRoll = rand() % 100;
+			if (critFailRoll < CRIT_FAIL_CHANCE) // On a critical fail, a random citizen in the town dies.
+			{
+				Citizen* unfortunateCitizen = myTown->getRandomCitizen();
+				cout << getName() << ": Wait a minute, that's not right-Oh no, this is very bad..." << endl;
+				cout << "One of " << getName() << "'s experiments has failed spectacularly, injuring several citizens and killing " << unfortunateCitizen->getName() << "!" << endl;
+				unfortunateCitizen->kill();
+				return;
+			}
+
+			// A regular fail results in a setback for the mage's research.
+			cout << getName() << ": ...Did I do something wrong? These results aren't right at all." << endl;
+			cout << getName() << "'s research progress has been set back due to a failed experiment." << endl;
+			int setbackSeverity = rand() % 11 + 10; // 10-20
+			researchQuality -= setbackSeverity;
 			return;
 		}
 

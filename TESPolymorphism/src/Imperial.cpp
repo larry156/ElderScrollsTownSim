@@ -4,6 +4,7 @@
 
 #include "Imperial.h"
 #include <iostream>
+#include "Town.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	{
 		profession = "Bard";
 		profCombatSkillBonus = rand() % 6 + 2; // For some reason bards know how to fight in fantasy universes. Range between 2-7.
+		blackSacramentChance = 5; // 5% chance of performing the Black Sacrament on someone.
 
 		dialogue.push_back("Care for a song, %targetfirst%?");
 		dialogue.push_back("I think my lute might be broken.");
@@ -26,6 +28,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	{
 		profession = "Assassin";
 		profCombatSkillBonus = rand() % 6 + 5; // Range between 5-10.
+		blackSacramentChance = 0; // It'd be kind of weird if an assassin does the Black Sacrament...
 
 		deities.push_back("Sithis");
 		deities.push_back("The Night Mother");
@@ -39,6 +42,7 @@ Imperial::Imperial(string myName) : Human(myName, "Imperial", 15, 25, 3) // Impe
 	{
 		profession = "Merchant";
 		profCombatSkillBonus = rand() % 11 - 5; // Merchants are usually depicted as easy targets. Range between -5 to 5.
+		blackSacramentChance = 10; // 10% chance of performing the Black Sacrament on someone.
 
 		dialogue.push_back("Hey %targetfirst%, are these trinkets for sale?");
 		dialogue.push_back("I hope that caravan didn't get attacked by bandits again.");
@@ -75,16 +79,17 @@ Imperial::~Imperial()
 // Each upkeep, Imperials may speak, will pay taxes, and may perform an action based on their profession.
 void Imperial::upkeep(Citizen* target)
 {
-	// Set curTarget to the current target if this Imperial isn't an assassin or if they need a new target.
-	if (profession != "Assassin" || attemptsOnTarget == -1 || curTarget->getDead())
-	{
-		curTarget = target;
+	curTarget = target;
 
-		if (profession == "Assassin")
+	// Set curTarget to the current target if this Imperial isn't an assassin or if they need a new target.
+	if (profession == "Assassin" && (attemptsOnTarget == -1 || assassinationTarget->getDead() || assassinationTarget->isLeaving()))
+	{
+		if (!myTown->blackSacramentTargets.empty())
 		{
-			if (curTarget->getProfession() == "Assassin")
+			assassinationTarget = myTown->getAssassinTarget();
+			if (assassinationTarget == NULL)
 			{
-				attemptsOnTarget = -1; // Assassins shouldn't really have contracts for other assassins.
+				attemptsOnTarget == -1;
 			}
 			else
 			{
@@ -95,6 +100,7 @@ void Imperial::upkeep(Citizen* target)
 
 	// Roll for actions
 	int speakRoll = rand() % 100;
+	int sacramentRoll = rand() % 100;
 	int actionRoll = rand() % 100;
 	// actionRoll needs to be below these thresholds for the Imperial to actually do something.
 	// If this Imperial has less than MIN_GOLD left, they will always do their job.
@@ -109,13 +115,17 @@ void Imperial::upkeep(Citizen* target)
 	{
 		bard();
 	}
-	else if (profession == "Assassin" && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD) && attemptsOnTarget != -1)
+	else if (profession == "Assassin" && (actionRoll < ASSASSIN_CHANCE || checkWealth() < MIN_GOLD))
 	{
 		assassinate();
 	}
 	else if (profession == "Merchant" && (actionRoll < TRADE_CHANCE || checkWealth() < MIN_GOLD))
 	{
 		trade();
+	}
+	else if (sacramentRoll < blackSacramentChance)
+	{
+		blackSacrament();
 	}
 	payTaxes();
 
@@ -157,23 +167,29 @@ void Imperial::bard()
 // If it fails, the assassin might die (chance decreases if the target was surprised). They might also give up on the contract and choose a new target.
 void Imperial::assassinate()
 {
-	if (!getDead() && !curTarget->getDead() && curTarget->getProfession() != "Assassin")
+	if (!getDead() && attemptsOnTarget == -1)
+	{
+		const int CONTRACT_WORTH = rand() % 5 + 3; // 3-8 gold
+		cout << getName() << " leaves town to attend to some \"business.\"" << endl;
+		getPaid(CONTRACT_WORTH);
+	}
+	else if (!getDead() && attemptsOnTarget >= 0)
 	{
 		// Death thresholds and how much gold a successful contract will pay.
 		const int CRIT_FAIL_NOSTEALTH = 30, CRIT_FAIL_STEALTH = 40, CONTRACT_WORTH = rand() % 11 + 5; // 5-15 gold
 
 		// Roll needs to be below this number for a successful surprise attack
-		const int STEALTH_THRESHOLD = jobSkill - (curTarget->getCombatSkill() / 2); // The higher the combatSkill, the more perceptive the target is?
+		const int STEALTH_THRESHOLD = jobSkill - (assassinationTarget->getCombatSkill() / 2); // The higher the combatSkill, the more perceptive the target is?
 		int stealthRoll = rand() % 100;
 		bool targetSurprised = false;
 		if (stealthRoll < STEALTH_THRESHOLD)
 		{
 			targetSurprised = true;
-			cout << getName() << " sneaks up behind " << curTarget->getName() << "..." << endl;
+			cout << getName() << " sneaks up behind " << assassinationTarget->getName() << "..." << endl;
 		}
 		else
 		{
-			cout << getName() << " tries to sneak up to " << curTarget->getName() << " but is spotted." << endl;
+			cout << getName() << " tries to sneak up to " << assassinationTarget->getName() << " but is spotted." << endl;
 		}
 		// Surprising the target gives a bonus, not doing so confers a penalty.
 		int combatModifier = 0;
@@ -188,13 +204,13 @@ void Imperial::assassinate()
 		//cout << "Combat modifier: " << combatModifier << endl;
 
 		// Assassinate
-		int myRoll = combatRoll() + combatModifier, theirRoll = curTarget->combatRoll();
+		int myRoll = combatRoll() + combatModifier, theirRoll = assassinationTarget->combatRoll();
 		//cout << "Assassin: " << myRoll << " Target: " << theirRoll << endl;
 		// Success results in death of the target
 		if (myRoll > theirRoll)
 		{
 			cout << getName() << ": Hail Sithis!" << endl;
-			curTarget->kill();
+			assassinationTarget->kill();
 			cout << getName() << ": I should return to the sanctuary and turn in my contract." << endl;
 			getPaid(CONTRACT_WORTH);
 			attemptsOnTarget = -1;
@@ -202,13 +218,15 @@ void Imperial::assassinate()
 		// The assassin dies if the difference between theirRoll and myRoll is greater than the death thresholds.
 		else if (theirRoll - myRoll > CRIT_FAIL_STEALTH || (theirRoll - myRoll > CRIT_FAIL_NOSTEALTH && !targetSurprised))
 		{
-			cout << curTarget->getName() << ": Hah! This is what the Dark Brotherhood sends? Pathetic." << endl;
+			cout << assassinationTarget->getName() << ": Hah! This is what the Dark Brotherhood sends? Pathetic." << endl;
+			// Re-add the target to the targets list so someone else can try.
+			myTown->blackSacramentTargets.push_back(assassinationTarget);
 			kill();
 		}
 		// Just a regular failure where the assassin gets away.
 		else
 		{
-			cout << curTarget->getName() << ": Blasted assassin, just die already!" << endl;
+			cout << assassinationTarget->getName() << ": Blasted assassin, just die already!" << endl;
 
 
 			int giveUpChance = attemptsOnTarget * 10; // Each failed attempt makes the assassin more likely to give up.
@@ -217,6 +235,8 @@ void Imperial::assassinate()
 			{
 				cout << getName() << ": Gah, I've had enough of this! *turns invisible and runs off*" << endl;
 				attemptsOnTarget = -1;
+				// Re-add the target to the targets list so someone else can try.
+				myTown->blackSacramentTargets.push_back(assassinationTarget);
 			}
 			else
 			{

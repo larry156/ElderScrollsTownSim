@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <windows.h>
-#include <Citizen.h>
+#include "Citizen.h"
 
 class Town
 {
@@ -12,14 +12,15 @@ class Town
 		Town(int townSize, bool doWelfare);
 		virtual ~Town();
 		std::vector<Citizen*> myCitizens;
+		std::vector<Citizen*> blackSacramentTargets; // A vector is used instead of a queue so I can check to see if it already contains a specific citizen.
 		std::map<std::string, std::vector<std::string>> nameListsFirst, nameListsLast;
 		Citizen* getRandomCitizen();
 		int getTarget(Citizen* curCitizen);
+		Citizen* getAssassinTarget(bool justClear = false);
 		//std::vector<Citizen*> getResidents();
 		bool readNames(std::string fileName, std::vector<std::string> &theList);
 		std::string nameGen(std::vector<std::string> &nameList);
 		void moveIn();
-		//void moveOut(int indexPos);
 		void clearDeadResidents();
 		void initializeTown(); // For reasons, it's better to not have this in the constructor.
 		void runSimulation();

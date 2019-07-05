@@ -15,6 +15,7 @@ class Imperial : public Human
 
 	private:
 		int attemptsOnTarget;
+		Citizen* assassinationTarget;
 		void bard();
 		void assassinate();
 		void trade();

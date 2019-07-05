@@ -64,6 +64,7 @@ Redguard::Redguard(string myName) : Human(myName, "Redguard", 10, 20, 3)
 	dialogue.push_back("Blasted necromancers and their foul magic...%deity% curse them all!");
 
 	speakChance = rand() % 21 + 50; // Redguards have a 50-70% chance of speaking.
+	blackSacramentChance = 10; // 2% chance of performing the Black Sacrament on someone.
 	combatSkill = rand() % 16 + 15 + profCombatSkillBonus; // Redguards have a combatSkill between 15-30, plus whatever bonus their profession gives them.
 
 	cout << getName() << " is a Redguard from Hammerfell." << endl;
@@ -89,6 +90,7 @@ void Redguard::upkeep(Citizen* target)
 
 	// Roll for actions
 	int speakRoll = rand() % 100;
+	int sacramentRoll = rand() % 100;
 	int actionRoll = rand() % 100;
 	// actionRoll needs to be below these thresholds for the Redguard to actually do something.
 	// If this Redguard has less than MIN_GOLD left, they will always do their job. (Adventurers will always do something so they don't have a threshold)
@@ -99,13 +101,18 @@ void Redguard::upkeep(Citizen* target)
 	{
 		speak();
 	}
-	if (profession == "Adventurer")
-	{
-		adventure();
-	}
-	else if (profession == "Mercenary" && (actionRoll < MERCENARY_CHANCE || checkWealth() < MIN_GOLD))
+
+	if (profession == "Mercenary" && (actionRoll < MERCENARY_CHANCE || checkWealth() < MIN_GOLD))
 	{
 		mercenary();
+	}
+	else if (sacramentRoll < blackSacramentChance)
+	{
+		blackSacrament();
+	}
+	else if (profession == "Adventurer")
+	{
+		adventure();
 	}
 	payTaxes();
 

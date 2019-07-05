@@ -56,6 +56,7 @@ Nord::Nord(string myName) : Human(myName, "Nord", 10, 20, 3)
 	dialogue.push_back("%deity%'s blessings be upon you, %target%.");
 
 	speakChance = rand() % 21 + 50; // Nords have a 50-70% chance of speaking.
+	blackSacramentChance = 10; // 10% chance of performing the Black Sacrament on someone.
 	brawlChance = rand() % 101; // Nords have a 0-100% chance of brawling someone.
 	combatSkill = rand() % 21 + 10 + profCombatSkillBonus; // Nords have a combatSkill between 10-30, plus whatever their profession gives them.
 
@@ -80,6 +81,7 @@ void Nord::upkeep(Citizen* target)
 	// Set curTarget to the current target and roll for actions
 	curTarget = target;
 	int speakRoll = rand() % 100;
+	int sacramentRoll = rand() % 100;
 	int brawlRoll = rand() % 100;
 	int huntRoll = rand() % 2;
 
@@ -95,6 +97,10 @@ void Nord::upkeep(Citizen* target)
 	else if (huntRoll == 0 && profession == "Hunter")
 	{
 		hunt();
+	}
+	else if (sacramentRoll < blackSacramentChance)
+	{
+		blackSacrament();
 	}
 	else if (profession == "Adventurer")
 	{

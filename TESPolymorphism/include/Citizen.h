@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+class Town;
+
 class Citizen
 {
 	public:
@@ -15,6 +17,7 @@ class Citizen
 		std::string getProfession();
 		int checkWealth();
 		bool getDead();
+		bool isLeaving();
 		int getCombatSkill();
 		int getJobSkill();
 		int combatRoll();
@@ -24,26 +27,30 @@ class Citizen
 		virtual void speak();
 		virtual void upkeep(Citizen* target) = 0;
 		virtual void kill();
+		virtual void leave();
+		void blackSacrament();
 		void replaceString(std::string &theString, std::string replaceThis, std::string replaceWith); // Used to replace things like %target% with actual words/names.
 		void listStats(); // Used for debug purposes.
+		void setResidence(Town* newTown);
 
 	protected:
-		bool isDead;
+		bool isDead, hasLeft;
 		std::vector<std::string> dialogue;
 		std::vector<std::string> deities;
 		std::string profession;
 		Citizen* curTarget;
 		int speakChance;
+		int blackSacramentChance;
 		int combatSkill;
 		int profCombatSkillBonus; // Some professions get a bonus or malus to their combat skill.
 		int jobSkill;
+		Town* myTown;
 
 	private:
 		std::string name;
 		std::string species;
 		int money;
 		int taxAmount;
-
 };
 
 #endif // CITIZEN_H

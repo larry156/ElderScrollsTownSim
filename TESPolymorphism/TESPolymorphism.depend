@@ -17,13 +17,14 @@
 	"Redguard.h"
 	"Altmer.h"
 
-1552962590 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
+1562287920 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\citizen.cpp
 	"Citizen.h"
 	<iostream>
 	<string>
 	<cstdlib>
+	"Town.h"
 
-1552962594 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
+1562283826 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\citizen.h
 	<vector>
 	<string>
 
@@ -53,7 +54,7 @@
 	<Citizen.h>
 	<string>
 
-1555455214 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
+1562287747 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\nord.cpp
 	"Nord.h"
 	<iostream>
 	<cstdlib>
@@ -130,11 +131,12 @@
 	<vector>
 	<tuple>
 
-1555455214 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
+1562350169 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\imperial.cpp
 	"Imperial.h"
 	<iostream>
+	"Town.h"
 
-1550545001 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\imperial.h
+1562285083 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\imperial.h
 	<Human.h>
 	<string>
 
@@ -146,7 +148,7 @@
 	"Imperial.h"
 	<iostream>
 
-1555455214 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\redguard.cpp
+1562287766 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\redguard.cpp
 	"Redguard.h"
 	<iostream>
 	<cstdlib>
@@ -156,11 +158,12 @@
 	<Human.h>
 	<string>
 
-1555455214 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\altmer.cpp
+1562362955 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\altmer.cpp
 	"Altmer.h"
 	<iostream>
+	"Town.h"
 
-1555381401 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\altmer.h
+1562349002 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\altmer.h
 	<Mer.h>
 	<string>
 
@@ -182,7 +185,7 @@
 	"Altmer.h"
 	<iostream>
 
-1555465745 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\town.cpp
+1562362824 source:c:\users\larry\documents\github\tespolymorphism\tespolymorphism\src\town.cpp
 	"Town.h"
 	<iostream>
 	<fstream>
@@ -192,10 +195,10 @@
 	<Imperial.h>
 	<Redguard.h>
 
-1555465672 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\town.h
+1562350250 c:\users\larry\documents\github\tespolymorphism\tespolymorphism\include\town.h
 	<string>
 	<vector>
 	<map>
 	<windows.h>
-	<Citizen.h>
+	"Citizen.h"
 

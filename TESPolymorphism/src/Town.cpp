@@ -30,10 +30,14 @@ Town::~Town()
     }
 }
 
-// Get a random citizen from the town
+// Get a random living citizen from the town
 Citizen* Town::getRandomCitizen()
 {
-	int citizenIndex = rand() % myCitizens.size();
+	int citizenIndex;
+	do
+	{
+		citizenIndex = rand() % myCitizens.size();
+	} while (myCitizens[citizenIndex]->getDead() || myCitizens[citizenIndex]->isLeaving());
 	return myCitizens[citizenIndex];
 }
 // Get a random citizen that is not the one passed in as a parameter
@@ -53,8 +57,37 @@ int Town::getTarget(Citizen* curCitizen)
 	while (targetIndex == citizenIndex)
 	{
 		targetIndex = rand() % myCitizens.size();
+		if (myCitizens[targetIndex] == NULL || myCitizens[targetIndex]->getDead() || myCitizens[targetIndex]->isLeaving())
+		{
+			targetIndex = citizenIndex; // Make sure targets aren't dead since that breaks stuff sometimes.
+		}
 	}
 	return targetIndex;
+}
+// Pick a target for assassins to try and kill.
+Citizen* Town::getAssassinTarget(bool justClear)
+{
+	if (blackSacramentTargets.empty())
+	{
+		return NULL;
+	}
+	// First clear out all the dead people from the targets list
+	while (blackSacramentTargets.front()->getDead() || blackSacramentTargets.front()->isLeaving() || blackSacramentTargets.front() == NULL)
+	{
+		blackSacramentTargets.erase(blackSacramentTargets.begin());
+		if (blackSacramentTargets.empty())
+		{
+			return NULL;
+		}
+	}
+	if (justClear)
+	{
+		return NULL;
+	}
+
+	Citizen* target = blackSacramentTargets.front();
+	blackSacramentTargets.erase(blackSacramentTargets.begin());
+	return target;
 }
 // Return the whole town as a vector of citizens
 /* vector<Citizen*> Town::getResidents()
@@ -101,46 +134,46 @@ void Town::moveIn()
     //cout << raceRoll << endl;
     if (raceRoll == 0)
     {
-        myCitizens.push_back(new Nord(nameGen(nameListsFirst["Nord"]) + " " + nameGen(nameListsLast["Nord"])));
+        newResident = new Nord(nameGen(nameListsFirst["Nord"]) + " " + nameGen(nameListsLast["Nord"]));
     }
     else if (raceRoll == 1)
     {
-        myCitizens.push_back(new Imperial(nameGen(nameListsFirst["Imperial"]) + " " + nameGen(nameListsLast["Imperial"])));
+        newResident = new Imperial(nameGen(nameListsFirst["Imperial"]) + " " + nameGen(nameListsLast["Imperial"]));
     }
     else if (raceRoll == 2)
 	{
 		const vector<string> PREFIXES = {"at-", "af-"};
 		int prefixRoll = rand() % PREFIXES.size();
-		myCitizens.push_back(new Redguard(nameGen(nameListsFirst["Redguard"]) + " " + PREFIXES[prefixRoll] + nameGen(nameListsFirst["Redguard"])));
+		newResident = new Redguard(nameGen(nameListsFirst["Redguard"]) + " " + PREFIXES[prefixRoll] + nameGen(nameListsFirst["Redguard"]));
 	}
 	else if (raceRoll == 3)
 	{
 		int isHoRMember = rand() % 3; // 33% chance of being House of Reveries. (Not enough unique names)
 		if (isHoRMember == 0)
 		{
-			myCitizens.push_back(new Altmer(nameGen(nameListsLast["HouseOfReveries"]), true));
+			newResident = new Altmer(nameGen(nameListsLast["HouseOfReveries"]), true);
 		}
 		else
 		{
-			myCitizens.push_back(new Altmer(nameGen(nameListsFirst["Altmer"]) + " " + nameGen(nameListsLast["Altmer"])));
+			newResident = new Altmer(nameGen(nameListsFirst["Altmer"]) + " " + nameGen(nameListsLast["Altmer"]));
 		}
 	}
+	newResident->setResidence(this);
+	myCitizens.push_back(newResident);
     cout << endl;
 }
-/* void moveOut(int indexPos)
-{
-
-} */
 // Bury all the dead residents of the town. This function does not move in any citizens to replace deceased ones.
+// As of July 4, 2019, this function also clears out any citizens that have left, even if they're still alive.
 void Town::clearDeadResidents()
 {
 	SetConsoleTextAttribute(consHandle, C_GRAY);
 	for (int i = 0; i < myCitizens.size(); i++)
 	{
-		if (myCitizens[i]->getDead())
+		if (myCitizens[i]->getDead() || myCitizens[i]->isLeaving())
 		{
 			delete myCitizens[i];
 			myCitizens.erase(myCitizens.begin() + i);
+			i--;
 			cout << endl;
 		}
 	}
@@ -195,15 +228,10 @@ void Town::runSimulation()
 			cout << "It is the " << curDay << "th of " << MONTHS[curMonth] << ", Year " << curYear << "." << endl << endl;
 		}
 
-		// Get rid of all the dead people. Loop checks to see if any citizens are dead.
-		for (int i = 0; i < myCitizens.size(); i++) // Probably very inefficient but whatever
-		{
-			if (myCitizens[i]->getDead())
-			{
-				clearDeadResidents();
-				break;
-			}
-		}
+		// Get rid of all the dead people.
+		getAssassinTarget(true); //
+		clearDeadResidents();
+
 		// New people move in at the start of each day, if there is space in the town.
 		if (myCitizens.size() < preferredSize)
 		{
@@ -243,6 +271,7 @@ void Town::runSimulation()
 		}
     	// The end of the day. Prompt user whether or not to continue.
     	SetConsoleTextAttribute(consHandle, C_TURQUOISE);
+    	//cout << getRandomCitizen()->getName() << " was chosen!" << endl;
         cout << "The day has ended. Observe the next? (Yes/No): ";
         getline(cin, keepGoing);
         cout << endl;
