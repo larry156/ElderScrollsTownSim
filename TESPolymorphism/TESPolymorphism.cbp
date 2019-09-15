@@ -36,6 +36,7 @@
 		</Compiler>
 		<Unit filename="include/Altmer.h" />
 		<Unit filename="include/BeastRace.h" />
+		<Unit filename="include/Breton.h" />
 		<Unit filename="include/Citizen.h" />
 		<Unit filename="include/Human.h" />
 		<Unit filename="include/Imperial.h" />
@@ -46,6 +47,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Altmer.cpp" />
 		<Unit filename="src/BeastRace.cpp" />
+		<Unit filename="src/Breton.cpp" />
 		<Unit filename="src/Citizen.cpp" />
 		<Unit filename="src/Human.cpp" />
 		<Unit filename="src/Imperial.cpp" />
